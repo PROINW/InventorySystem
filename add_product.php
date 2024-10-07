@@ -109,7 +109,7 @@ if (isset($_POST['add_product'])) {
                       <i class="glyphicon glyphicon-usd"></i>
                     </span>
                     <input type="number" class="form-control" name="buying-price" placeholder="ราคาต้นทุน">
-                    <span class="input-group-addon">.00</span>
+                    <span class="input-group-addon">บาท</span>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -118,7 +118,7 @@ if (isset($_POST['add_product'])) {
                       <i class="glyphicon glyphicon-usd"></i>
                     </span>
                     <input type="number" class="form-control" name="saleing-price" placeholder="ราคาขาย">
-                    <span class="input-group-addon">.00</span>
+                    <span class="input-group-addon">บาท</span>
                   </div>
                 </div>
               </div>

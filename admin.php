@@ -142,42 +142,44 @@ $sales_data_year = get_sales_data('yearly'); // ฟังก์ชันสำ�
     </div>
   </div>
   <div class="col-md-4">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong>
-          <span class="glyphicon glyphicon-th"></span>
-          <span>ยอดขายล่าสุด</span>
-        </strong>
-      </div>
-      <div class="panel-body">
-        <table class="table table-striped table-bordered table-condensed">
-          <thead>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>
+        <span class="glyphicon glyphicon-th"></span>
+        <span>ยอดขายล่าสุด</span>
+      </strong>
+    </div>
+    <div class="panel-body">
+      <table class="table table-striped table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th class="text-center" style="width: 50px;">#</th>
+            <th class="text-center" style="width: 120px;">ชื่อสินค้า</th>
+            <th class="text-center" style="width: 50px;">วันที่</th>
+            <th class="text-center" style="width: 85px;">ยอดขายทั้งหมด</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($recent_sales as  $recent_sale) : ?>
             <tr>
-              <th class="text-center" style="width: 50px;">#</th>
-              <th class="text-center" style="width: 120px;">ชื่อสินค้า</th>
-              <th class="text-center" style="width: 50px;">วันที่</th>
-              <th class="text-center" style="width: 85px;">ยอดขายทั้งหมด</th>
+              <td class="text-center"><?php echo count_id(); ?></td>
+              <td>
+                <a href="edit_sale.php?id=<?php echo (int)$recent_sale['id']; ?>">
+                  <?php echo remove_junk(first_character($recent_sale['name'])); ?>
+                </a>
+              </td>
+              <td><?php echo remove_junk(ucfirst($recent_sale['date'])); ?></td>
+              <!-- คำนวณยอดขายทั้งหมดโดยใช้ qty * price -->
+              <td>฿<?php echo number_format((float)$recent_sale['qty'] * (float)$recent_sale['price'], 2); ?></td>
             </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($recent_sales as  $recent_sale) : ?>
-              <tr>
-                <td class="text-center"><?php echo count_id(); ?></td>
-                <td>
-                  <a href="edit_sale.php?id=<?php echo (int)$recent_sale['id']; ?>">
-                    <?php echo remove_junk(first_character($recent_sale['name'])); ?>
-                  </a>
-                </td>
-                <td><?php echo remove_junk(ucfirst($recent_sale['date'])); ?></td>
-                <td>฿<?php echo remove_junk(first_character($recent_sale['price'])); ?></td>
-              </tr>
 
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
+
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -219,7 +221,7 @@ $sales_data_year = get_sales_data('yearly'); // ฟังก์ชันสำ�
 <?php include_once('layouts/footer.php'); ?>
 
 <script>
-  const monthlySalesData = <?php echo json_encode($sales_data_month); ?>;
+ const monthlySalesData = <?php echo json_encode($sales_data_month); ?>;
   const yearlySalesData = <?php echo json_encode($sales_data_year); ?>;
 
   const ctxMonthly = document.getElementById('monthlySalesChart').getContext('2d');
@@ -229,45 +231,45 @@ $sales_data_year = get_sales_data('yearly'); // ฟังก์ชันสำ�
   const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
   monthlySalesData.labels = monthlySalesData.labels.map(month => monthNames[month - 1]);
 
-let monthlySalesChart = new Chart(ctxMonthly, {
-  type: 'bar',
-  data: {
-    labels: monthlySalesData.labels,
-    datasets: [{
-      label: 'ยอดขายรายเดือน',
-      data: monthlySalesData.data,
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
+  let monthlySalesChart = new Chart(ctxMonthly, {
+    type: 'bar',
+    data: {
+      labels: monthlySalesData.labels,
+      datasets: [{
+        label: 'ยอดขายรายเดือน',
+        data: monthlySalesData.data,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       }
     }
-  }
-});
+  });
 
-let yearlySalesChart = new Chart(ctxYearly, {
-  type: 'bar',
-  data: {
-    labels: yearlySalesData.labels,
-    datasets: [{
-      label: 'ยอดขายรายปี',
-      data: yearlySalesData.data,
-      backgroundColor: 'rgba(153, 102, 255, 0.2)',
-      borderColor: 'rgba(153, 102, 255, 1)',
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      y: {
-        beginAtZero: true
+  let yearlySalesChart = new Chart(ctxYearly, {
+    type: 'bar',
+    data: {
+      labels: yearlySalesData.labels,
+      datasets: [{
+        label: 'ยอดขายรายปี',
+        data: yearlySalesData.data,
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       }
     }
-  }
-});
+  });
 </script>

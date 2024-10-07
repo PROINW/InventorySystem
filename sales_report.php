@@ -1,8 +1,8 @@
 <?php
-$page_title = 'Sale Report';
-  require_once('includes/load.php');
-  // Checkin What level user has permission to view this page
-   page_require_level(3);
+$page_title = 'รายงานการขาย';
+require_once('includes/load.php');
+// ตรวจสอบสิทธิ์ในการเข้าถึงหน้าสำหรับผู้ใช้
+page_require_level(3);
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
@@ -19,15 +19,15 @@ $page_title = 'Sale Report';
       <div class="panel-body">
           <form class="clearfix" method="post" action="sale_report_process.php">
             <div class="form-group">
-              <label class="form-label">Date Range</label>
+              <label class="form-label">ช่วงวันที่</label>
                 <div class="input-group">
-                  <input type="text" class="datepicker form-control" name="start-date" placeholder="From">
+                  <input type="text" class="datepicker form-control" name="start-date" placeholder="จากวันที่">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-menu-right"></i></span>
-                  <input type="text" class="datepicker form-control" name="end-date" placeholder="To">
+                  <input type="text" class="datepicker form-control" name="end-date" placeholder="ถึงวันที่">
                 </div>
             </div>
             <div class="form-group">
-                 <button type="submit" name="submit" class="btn btn-primary">Generate Report</button>
+                 <button type="submit" name="submit" class="btn btn-primary">สร้างรายงาน</button>
             </div>
           </form>
       </div>

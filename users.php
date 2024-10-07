@@ -54,10 +54,10 @@
            <td><?php echo read_date($a_user['last_login'])?></td>
            <td class="text-center">
              <div class="btn-group">
-                <a href="edit_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไข">
+                <a href="edit_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไข" >
                   <i class="glyphicon glyphicon-pencil"></i>
                </a>
-                <a href="delete_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-danger" data-toggle="tooltip" title="ลบ">
+                <a href="delete_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-danger" data-toggle="tooltip" title="ลบ" disabled>
                   <i class="glyphicon glyphicon-remove"></i>
                 </a>
                 </div>

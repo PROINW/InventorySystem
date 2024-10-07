@@ -155,20 +155,17 @@ if (isset($_POST['submit'])) {
             <td colspan="4"></td>
             <td colspan="1">ภาษีมูลค่าเพิ่ม (7%)</td>
             <td>฿<?php
-                  $vat = total_price($results)[0] * 0.07;
+                  $total_amount = total_price($results)[0]; // ยอดรวมทั้งหมด
+                  $vat = $total_amount * 0.07; // คำนวณภาษี 7%
                   echo number_format($vat, 2);
                   ?></td>
           </tr>
           <tr class="text-right">
             <td colspan="4"></td>
             <td colspan="1">ยอดสุทธิ</td>
-            <td>฿<?php echo number_format(total_price($results)[0] - $vat, 2); ?></td>
+            <td>฿<?php echo number_format($total_amount + $vat, 2); // คำนวณยอดสุทธิรวมภาษี 
+                  ?></td>
           </tr>
-          <!-- <tr class="text-right">
-            <td colspan="4"></td>
-            <td colspan="1">กำไร</td>
-            <td>฿<?php echo number_format(total_price($results)[1], 2); ?></td>
-          </tr> -->
         </tfoot>
 
       </table>

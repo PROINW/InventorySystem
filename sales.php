@@ -5,7 +5,7 @@ require_once('includes/load.php');
 page_require_level(3);
 ?>
 <?php
-$sales = find_all_sale();
+$sales = find_all_sale(); // ดึงข้อมูลการขายทั้งหมดจากฐานข้อมูล
 ?>
 <?php include_once('layouts/header.php'); ?>
 <link rel="stylesheet" href="libs/css/main.css" />
@@ -27,29 +27,31 @@ $sales = find_all_sale();
         </div>
       </div>
       <div class="panel-body">
-        <table class="table table-bordered table-striped">
-          <thead>
+        <table class="table">
+          <thead class="custom-bg">
             <tr>
-              <th class="text-center" style="width: 50px;">#</th>
+              <th class="text-center">#</th>
               <th> ชื่อสินค้า </th>
-              <th class="text-center" style="width: 15%;"> จำนวน</th>
-              <th class="text-center" style="width: 15%;"> ราคารวม </th>
-              <th class="text-center" style="width: 15%;"> วันที่ </th>
-              <th class="text-center" style="width: 15%;"> สถานะ </th>
-              <th class="text-center" style="width: 15%;"> บริษัทจัดส่ง </th> <!-- เพิ่มคอลัมน์บริษัทจัดส่ง -->
-              <th class="text-center" style="width: 100px;"> แก้ไข </th>
+              <th class="text-center"> ชื่อผู้สั่งซื้อ </th>
+              <th class="text-center"> จำนวน </th>
+              <th class="text-center"> ราคารวม </th>
+              <th class="text-center"> วันที่ </th>
+              <th class="text-center"> สถานะ </th>
+              <th class="text-center"> บริษัทจัดส่ง </th>
+              <th class="text-center"> แก้ไข </th>
             </tr>
           </thead>
           <tbody>
             <?php foreach ($sales as $sale): ?>
-            <tr>
-              <td class="text-center"><?php echo count_id(); ?></td>
-              <td><?php echo remove_junk($sale['name']); ?></td>
-              <td class="text-center"><?php echo (int)$sale['qty']; ?></td>
-              <td class="text-center"><?php echo remove_junk($sale['price']); ?></td>
-              <td class="text-center"><?php echo $sale['date']; ?></td>
-              <td class="text-center">
-                <?php 
+              <tr>
+                <td class="text-center"><?php echo count_id(); ?></td>
+                <td><?php echo remove_junk($sale['name']); ?></td>
+                <td class="text-center"><?php echo remove_junk($sale['customer_name']); ?></td>
+                <td class="text-center"><?php echo (int)$sale['qty']; ?></td>
+                <td class="text-center"><?php echo number_format((int)$sale['qty'] * (float)$sale['price'], 2); ?></td>
+                <td class="text-center"><?php echo $sale['date']; ?></td>
+                <td class="text-center">
+                  <?php
                   if ($sale['status'] === 'Completed') {
                     echo '<span class="custon-label label-success">เสร็จสมบูรณ์</span>';
                   } elseif ($sale['status'] === 'Pending') {
@@ -59,20 +61,20 @@ $sales = find_all_sale();
                   } else {
                     echo '<span class="label label-default">ไม่ทราบสถานะ</span>';
                   }
-                ?>
-              </td>
-              <td class="text-center"><?php echo remove_junk($sale['delivery_company']); ?></td> <!-- แสดงบริษัทจัดส่ง -->
-              <td class="text-center">
-                <div class="btn-group">
-                  <a href="edit_sale.php?id=<?php echo (int)$sale['id']; ?>" class="btn btn-warning btn-sm" title="แก้ไข" data-toggle="tooltip">
-                    <span class="glyphicon glyphicon-edit"></span>
-                  </a>
-                  <a href="delete_sale.php?id=<?php echo (int)$sale['id']; ?>" class="btn btn-danger btn-sm" title="ลบ" data-toggle="tooltip">
-                    <span class="glyphicon glyphicon-trash"></span>
-                  </a>
-                </div>
-              </td>
-            </tr>
+                  ?>
+                </td>
+                <td class="text-center"><?php echo remove_junk($sale['delivery_company']); ?></td>
+                <td class="text-center">
+                  <div class="btn-group">
+                    <a href="edit_sale.php?id=<?php echo (int)$sale['id']; ?>" class="btn btn-warning btn-sm" title="แก้ไข" data-toggle="tooltip">
+                      <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a href="delete_sale.php?id=<?php echo (int)$sale['id']; ?>" class="btn btn-danger btn-sm" title="ลบ" data-toggle="tooltip">
+                      <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
             <?php endforeach; ?>
           </tbody>
         </table>

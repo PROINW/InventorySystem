@@ -96,12 +96,12 @@ if (isset($_POST['update'])) {
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Are you sure you want to update this group?
+      คุณแน่ใจว่าต้องการอัพเดตกลุ่มนี้หรือไม่?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">ปิด</button>
         <!-- ปุ่มยืนยันการอัปเดต -->
-        <button type="button" class="btn btn-primary" id="confirmUpdate">Save changes</button>
+        <button type="button" class="btn btn-primary" id="confirmUpdate">บันทึก</button>
       </div>
     </div>
   </div>

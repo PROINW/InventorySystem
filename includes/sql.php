@@ -291,15 +291,18 @@ function find_higest_saleing_product($limit)
 /*--------------------------------------------------------------*/
 /* Function for find all sales
  /*--------------------------------------------------------------*/
-function find_all_sale(){
+function find_all_sale() {
     global $db;
-    $sql  = "SELECT s.id, s.qty, s.price, s.date, s.status, p.name, d.name AS delivery_company";
-    $sql .= " FROM sales s";
-    $sql .= " LEFT JOIN products p ON s.product_id = p.id";
-    $sql .= " LEFT JOIN delivery_company d ON s.delivery_company_id = d.id"; // เพิ่มการเชื่อมต่อกับตารางบริษัทจัดส่ง
-    $sql .= " ORDER BY s.date DESC";
+    $sql  = "SELECT sales.id, products.name, sales.qty, sales.price, sales.date, sales.status, ";
+    $sql .= "delivery_company.name AS delivery_company, customers.name AS customer_name ";
+    $sql .= "FROM sales ";
+    $sql .= "JOIN products ON sales.product_id = products.id ";
+    $sql .= "JOIN delivery_company ON sales.delivery_company_id = delivery_company.id ";
+    $sql .= "JOIN customers ON sales.customer_id = customers.id ";  // ตรวจสอบว่ามีการ JOIN ตาราง customers อย่างถูกต้อง
+    $sql .= "ORDER BY sales.id DESC";
     return find_by_sql($sql);
 }
+
 
 /*--------------------------------------------------------------*/
 /* Function for Display Recent sale
@@ -307,10 +310,11 @@ function find_all_sale(){
 function find_recent_sale_added($limit)
 {
   global $db;
-  $sql  = "SELECT s.id,s.qty,s.price,s.date,p.name";
+  $sql  = "SELECT s.id, s.qty, s.price, s.date, p.name";
   $sql .= " FROM sales s";
-  $sql .= " LEFT JOIN products p ON s.product_id = p.id";
-  $sql .= " ORDER BY s.date DESC LIMIT " . $db->escape((int)$limit);
+  $sql .= " JOIN products p ON s.product_id = p.id";
+  $sql .= " ORDER BY s.date DESC";
+  $sql .= " LIMIT ".$db->escape((int)$limit);
   return find_by_sql($sql);
 }
 /*--------------------------------------------------------------*/
@@ -382,6 +386,11 @@ function search_product_table($search_term) {
   $sql .= " ORDER BY p.id DESC";
   return find_by_sql($sql);
 }
-
+function find_all_where($table, $column, $value) {
+  global $db;
+  $sql  = "SELECT * FROM " . $db->escape($table);
+  $sql .= " WHERE " . $db->escape($column) . "='" . $db->escape($value) . "'";
+  return find_by_sql($sql);
+}
 
 

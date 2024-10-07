@@ -124,26 +124,55 @@ function randString($length = 5)
     $str .= $cha[mt_rand(0, strlen($cha))];
   return $str;
 }
-function get_sales_data($period)
-{
+
+function get_sales_data($type = 'monthly') {
   global $db;
-  $data = [];
-  if ($period == 'monthly') {
-    // Fetch sales data for each month of the current year
-    $sql = "SELECT MONTH(date) as month, SUM(price) as total_sales FROM sales WHERE YEAR(date) = YEAR(CURRENT_DATE()) GROUP BY month";
-  } else {
-    // Fetch sales data for each year
-    $sql = "SELECT YEAR(date) as year, SUM(price) as total_sales FROM sales GROUP BY year";
+
+  if ($type == 'monthly') {
+    $sql  = "SELECT MONTH(date) as month, SUM(qty * price) as total_sales";
+    $sql .= " FROM sales";
+    $sql .= " WHERE YEAR(date) = YEAR(CURDATE())"; // ดึงข้อมูลเฉพาะปีปัจจุบัน
+    $sql .= " GROUP BY MONTH(date)";
+    $sql .= " ORDER BY MONTH(date)";
+  } elseif ($type == 'yearly') {
+    $sql  = "SELECT YEAR(date) as year, SUM(qty * price) as total_sales";
+    $sql .= " FROM sales";
+    $sql .= " GROUP BY YEAR(date)";
+    $sql .= " ORDER BY YEAR(date)";
   }
+
   $result = $db->query($sql);
-  $labels = [];
-  $sales_data = [];
-  while ($row = $result->fetch_assoc()) {
-    $labels[] = $period == 'monthly' ? $row['month'] : $row['year'];
-    $sales_data[] = $row['total_sales'];
+  $data = [];
+  
+  // เตรียมข้อมูลสำหรับกราฟ
+  while ($row = $db->fetch_assoc($result)) {
+    $data['labels'][] = $row[$type == 'monthly' ? 'month' : 'year'];
+    $data['data'][] = (float) $row['total_sales'];
   }
-  $data['labels'] = $labels;
-  $data['data'] = $sales_data;
+
   return $data;
 }
+function find_orders_by_user($user_id) {
+  global $db;
+  $sql  = "SELECT * FROM sales WHERE user_id = '{$user_id}'";
+  return find_by_sql($sql);
+}
+// ฟังก์ชันสำหรับดึงข้อมูลคำสั่งซื้อทั้งหมด
+// ฟังก์ชันสำหรับดึงข้อมูลคำสั่งซื้อทั้งหมด
+function find_all_orders() {
+  global $db;
+  $sql  = "SELECT sales.id, products.name AS product_name, customers.name AS customer_name, ";
+  $sql .= "sales.qty, sales.price, sales.date, sales.status ";
+  $sql .= "FROM sales ";
+  $sql .= "JOIN products ON sales.product_id = products.id ";
+  $sql .= "LEFT JOIN customers ON sales.customer_id = customers.id";
+  $result = $db->query($sql);
+  return $result;
+}
+
+
+
+
+
+
 

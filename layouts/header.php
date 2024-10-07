@@ -1,18 +1,19 @@
 <?php $user = current_user(); 
 require_once('includes/session.php'); ?>
 <!DOCTYPE html>
-  <html lang="en">
+  <html lang="th">
     <head>
     <meta charset="UTF-8">
     <title><?php if (!empty($page_title))
            echo remove_junk($page_title);
             elseif(!empty($user))
            echo ucfirst($user['name']);
-            else echo "Inventory Management System";?>
+            else echo "ระบบจัดการคลังสินค้า";?>
             
     </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker3.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="libs/css/main.css" />
   </head>
   <body>
@@ -34,19 +35,19 @@ require_once('includes/session.php'); ?>
               <li>
                   <a href="profile.php?id=<?php echo (int)$user['id'];?>">
                       <i class="glyphicon glyphicon-user"></i>
-                      Profile
+                      โปรไฟล์
                   </a>
               </li>
              <li>
-                 <a href="edit_account.php" title="edit account">
+                 <a href="edit_account.php" title="แก้ไขบัญชี">
                      <i class="glyphicon glyphicon-cog"></i>
-                     Settings
+                     การตั้งค่า
                  </a>
              </li>
              <li class="last">
                  <a href="logout.php">
                      <i class="glyphicon glyphicon-off"></i>
-                     Logout
+                     ออกจากระบบ
                  </a>
              </li>
            </ul>
@@ -58,15 +59,15 @@ require_once('includes/session.php'); ?>
     <div class="sidebar">
     <hr class="sidebar-divider ">
       <?php if($user['user_level'] === '1'): ?>
-        <!-- admin menu -->
+        <!-- เมนูผู้ดูแลระบบ -->
       <?php include_once('admin_menu.php');?>
 
       <?php elseif($user['user_level'] === '2'): ?>
-        <!-- Special user -->
+        <!-- เมนูผู้ใช้พิเศษ -->
       <?php include_once('special_menu.php');?>
 
       <?php elseif($user['user_level'] === '3'): ?>
-        <!-- User menu -->
+        <!-- เมนูผู้ใช้ทั่วไป -->
       <?php include_once('user_menu.php');?>
 
       <?php endif;?>

@@ -2,7 +2,7 @@
   <li>
     <a href="admin.php">
       <i class="glyphicon glyphicon-home"></i>
-      <span>แผงควบคุม</span>
+      <span>แดชบอร์ด</span>
     </a>
   </li>
   <li>
@@ -13,11 +13,11 @@
     <ul class="nav submenu">
       <li><a href="group.php">จัดการกลุ่มผู้ใช้</a> </li>
       <li><a href="users.php">จัดการผู้ใช้</a> </li>
-   </ul>
+    </ul>
   </li>
   <li>
-    <a href="company.php">
-      <i class="glyphicon glyphicon-indent-left"></i>
+    <a style="padding: 11.5px 0;" href="company.php">
+    <i class="bi bi-building-add"></i>
       <span>บริษัท</span>
     </a>
   </li>
@@ -33,9 +33,9 @@
       <span>สินค้า</span>
     </a>
     <ul class="nav submenu">
-       <li><a href="product.php">จัดการสินค้า</a> </li>
-       <li><a href="add_product.php">เพิ่มสินค้า</a> </li>
-   </ul>
+      <li><a href="product.php">จัดการสินค้า</a> </li>
+      <li><a href="add_product.php">เพิ่มสินค้า</a> </li>
+    </ul>
   </li>
   <li>
     <a href="media.php">
@@ -46,22 +46,25 @@
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-credit-card"></i>
-       <span>การขาย</span>
-      </a>
-      <ul class="nav submenu">
-         <li><a href="sales.php">จัดการการขาย</a> </li>
-         <li><a href="add_sale.php">เพิ่มการขาย</a> </li>
-     </ul>
+      <span>การขาย</span>
+    </a>
+    <ul class="nav submenu">
+      <li><a href="save_invoice.php">ใบเสนอราคา</a> </li>
+      <li><a href="quotes.php">รายการใบเสนอราคา</a> </li>
+      <li><a href="sales.php">จัดการการขาย</a> </li>
+      <li><a href="add_sale.php">เพิ่มการขาย</a> </li>
+      <li><a href="order_history.php">ประวัติการสั่งซื้อ</a> </li>
+    </ul>
   </li>
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-duplicate"></i>
-       <span>รายงานการขาย</span>
-      </a>
-      <ul class="nav submenu">
-        <li><a href="sales_report.php">การขายตามวันที่</a></li>
-        <li><a href="monthly_sales.php">การขายรายเดือน</a></li>
-        <li><a href="daily_sales.php">การขายรายวัน</a> </li>
-      </ul>
+      <span>รายงานการขาย</span>
+    </a>
+    <ul class="nav submenu">
+      <li><a href="sales_report.php">การขายตามวันที่</a></li>
+      <li><a href="monthly_sales.php">การขายรายเดือน</a></li>
+      <li><a href="daily_sales.php">การขายรายวัน</a> </li>
+    </ul>
   </li>
 </ul>

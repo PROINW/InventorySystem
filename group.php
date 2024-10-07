@@ -45,7 +45,7 @@
            <?php if($a_group['group_status'] === '1'): ?>
             <span class="custon-label custom-label-sucess"><?php echo "ใช้งาน"; ?></span>
           <?php else: ?>
-            <span class="label label-danger"><?php echo "ไม่ใช้งาน"; ?></span>
+            <span class="custom-label2 custom-label-danger"><?php echo "ไม่ใช้งาน"; ?></span>
           <?php endif;?>
            </td>
            <td class="text-center">
