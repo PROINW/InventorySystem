@@ -28,7 +28,6 @@
               </div>
               <button type="submit" class="btn btn-primary btn- ">ค้นหา</button>
             </form>
-            <!-- <a href="add_product.php" class="btn btn-primary">เพิ่มสินค้าใหม่</a> -->
           </div>
         </div>
         <div class="panel-body">
@@ -47,14 +46,14 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach ($products as $product):?>
+              <?php foreach ($products as $product): ?>
               <tr>
-                <td class="text-center"><?php echo count_id();?></td>
+                <td class="text-center"><?php echo count_id(); ?></td>
                 <td>
                   <?php if($product['media_id'] === '0'): ?>
-                    <img class="img-avatar img-circle" src="uploads/products/no_image.png" alt="">
+                    <img class="img-avatar img-circle" src="uploads/products/no_image.png" alt="ไม่มีรูปภาพ" style="cursor:pointer" data-toggle="modal" data-target="#imageModal-<?php echo $product['id']; ?>">
                   <?php else: ?>
-                    <img class="img-avatar img-circle" src="uploads/products/<?php echo $product['image']; ?>" alt="">
+                    <img class="img-avatar img-circle" src="uploads/products/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" style="cursor:pointer" data-toggle="modal" data-target="#imageModal-<?php echo $product['id']; ?>">
                   <?php endif; ?>
                 </td>
                 <td> <?php echo remove_junk($product['name']); ?></td>
@@ -74,7 +73,29 @@
                   </div>
                 </td>
               </tr>
-             <?php endforeach; ?>
+
+              <!-- Modal แสดงรูปภาพขนาดเต็ม -->
+              <div class="modal fade" id="imageModal-<?php echo $product['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel-<?php echo $product['id']; ?>" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="imageModalLabel-<?php echo $product['id']; ?>"><?php echo $product['name']; ?></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body text-center">
+                      <?php if($product['media_id'] === '0'): ?>
+                        <img src="uploads/products/no_image.png" alt="ไม่มีรูปภาพ" class="img-fluid">
+                      <?php else: ?>
+                        <img src="uploads/products/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" class="img-fluid">
+                      <?php endif; ?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>

@@ -29,7 +29,6 @@
             <th class="text-center" style="width: 50px;">#</th>
             <th>ชื่อกลุ่ม</th>
             <th class="text-center" style="width: 20%;">ระดับกลุ่ม</th>
-            <th class="text-center" style="width: 15%;">สถานะ</th>
             <th class="text-center" style="width: 100px;">แก้ไข</th>
           </tr>
         </thead>
@@ -40,13 +39,6 @@
            <td><?php echo remove_junk(ucwords($a_group['group_name']))?></td>
            <td class="text-center">
              <?php echo remove_junk(ucwords($a_group['group_level']))?>
-           </td>
-           <td class="text-center">
-           <?php if($a_group['group_status'] === '1'): ?>
-            <span class="custon-label custom-label-sucess"><?php echo "ใช้งาน"; ?></span>
-          <?php else: ?>
-            <span class="custom-label2 custom-label-danger"><?php echo "ไม่ใช้งาน"; ?></span>
-          <?php endif;?>
            </td>
            <td class="text-center">
              <div class="btn-group">
@@ -66,4 +58,4 @@
     </div>
   </div>
 </div>
-  <?php include_once('layouts/footer.php'); ?>
+<?php include_once('layouts/footer.php'); ?>

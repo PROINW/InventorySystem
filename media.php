@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="th">
 
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <?php
-$page_title = 'All Image';
+$page_title = 'รูปภาพทั้งหมด';
 require_once('includes/load.php');
 require_once('includes/session.php');
-// Checkin What level user has permission to view this page
+// ตรวจสอบสิทธิ์ของผู้ใช้ในการเข้าถึงหน้านี้
 page_require_level(2);
 ?>
 <?php $media_files = find_all('media'); ?>
@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
   $photo = new Media();
   $photo->upload($_FILES['file_upload']);
   if ($photo->process_media()) {
-    $session->msg('s', 'photo has been uploaded.');
+    $session->msg('s', 'อัปโหลดรูปภาพเรียบร้อยแล้ว.');
     redirect('media.php');
   } else {
     $session->msg('d', join($photo->errors));
@@ -37,17 +37,16 @@ if (isset($_POST['submit'])) {
     <div class="panel panel-default">
       <div class="panel-heading clearfix">
         <span class="glyphicon glyphicon-camera"></span>
-        <span>All Photos</span>
+        <span>รูปภาพทั้งหมด</span>
         <div class="pull-right">
           <form class="form-inline" action="media.php" method="POST" enctype="multipart/form-data">
             <div class="form-group">
               <div class="input-group">
                 <span class="input-group-btn">
-                  <!-- <input type="file" name="file_upload" multiple="multiple" class="btn btn-primary btn-file"/> -->
                   <input name="file_upload" multiple="multiple" class="form-control" type="file">
                 </span>
 
-                <button type="submit" name="submit" class="btn btn-warning">Upload</button>
+                <button type="submit" name="submit" class="btn btn-warning">อัปโหลด</button>
               </div>
             </div>
           </form>
@@ -58,10 +57,10 @@ if (isset($_POST['submit'])) {
           <thead>
             <tr>
               <th class="text-center" style="width: 50px;">#</th>
-              <th class="text-center">Photo</th>
-              <th class="text-center">Photo Name</th>
-              <th class="text-center" style="width: 20%;">Photo Type</th>
-              <th class="text-center" style="width: 50px;">Actions</th>
+              <th class="text-center">รูปภาพ</th>
+              <th class="text-center">ชื่อไฟล์รูปภาพ</th>
+              <th class="text-center" style="width: 20%;">ประเภทไฟล์</th>
+              <th class="text-center" style="width: 50px;">การจัดการ</th>
             </tr>
           </thead>
           <tbody>
@@ -78,7 +77,7 @@ if (isset($_POST['submit'])) {
                   <?php echo $media_file['file_type']; ?>
                 </td>
                 <td class="text-center">
-                  <a href="delete_media.php?id=<?php echo (int) $media_file['id']; ?>" class="btn btn-danger btn-xs" title="Edit">
+                  <a href="delete_media.php?id=<?php echo (int) $media_file['id']; ?>" class="btn btn-danger btn-xs" title="ลบ">
                     <span class="glyphicon glyphicon-trash"></span>
                   </a>
                 </td>
@@ -89,7 +88,6 @@ if (isset($_POST['submit'])) {
     </div>
   </div>
 </div>
-
 
 <?php include_once('layouts/footer.php'); ?>
 

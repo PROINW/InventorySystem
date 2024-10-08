@@ -13,11 +13,11 @@ if(empty($errors)){
      $session->login($user_id);
     //Update Sign in time
      updateLastLogIn($user_id);
-     $session->msg("s", "Welcome to Inventory Management System");
+     $session->msg("s", "ยินดีต้อนรับเข้าสู่ระบบจัดการคลังสินค้า");
      redirect('admin.php',false);
 
   } else {
-    $session->msg("d", "Sorry Username/Password incorrect.");
+    $session->msg("d", "ขออภัย ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง.");
     redirect('index.php',false);
   }
 

@@ -185,7 +185,7 @@ $total_with_vat = $quote['subtotal'] + $vat_amount;
                     $product = find_by_id('products', $item['product_id']);
                     echo $product ? $product['name'] : 'ไม่พบสินค้า'; 
                 ?></td>
-                <td><?php echo $item['quantity']; ?></td>
+                <td><?php echo number_format($item['quantity'], 0); ?></td>
                 <td>ตัว</td>
                 <td><?php echo number_format($item['price'], 2); ?></td>
                 <td><?php echo number_format($item['total'], 2); ?></td>

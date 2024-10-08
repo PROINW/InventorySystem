@@ -26,7 +26,7 @@ $orders = find_all_orders();
         </strong>
       </div>
       <div class="panel-body">
-        <table class="table table-bordered">
+        <table class="table ">
           <thead class="custom-bg">
             <tr>
               <th class="text-center">#</th>

@@ -94,7 +94,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                         <option value="<?php echo $product['id']; ?>"><?php echo $product['name']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <textarea class="form-control" name="product_details[]" placeholder="รายละเอียด (กด Shift+Enter เพื่อขึ้นบรรทัดใหม่)"></textarea>
+
                             </td>
                             <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
@@ -112,7 +112,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                         <option value="<?php echo $product['id']; ?>"><?php echo $product['name']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <textarea class="form-control" name="product_details[]" placeholder="รายละเอียด (กด Shift+Enter เพื่อขึ้นบรรทัดใหม่)"></textarea>
+
                             </td>
                             <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
@@ -128,7 +128,23 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                         <option value="<?php echo $product['id']; ?>"><?php echo $product['name']; ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                                <textarea class="form-control" name="product_details[]" placeholder="รายละเอียด (กด Shift+Enter เพื่อขึ้นบรรทัดใหม่)"></textarea>
+
+                            </td>
+                            <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
+                            <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
+                            <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
+                            <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
+                            </tr>
+                            <tr>
+                            <td>4</td>
+                            <td>
+                                <select class="form-control product-select" name="product_id[]" onchange="updatePrice(this)">
+                                    <option value="">ชื่อสินค้า</option>
+                                    <?php foreach ($products as $product): ?>
+                                        <option value="<?php echo $product['id']; ?>"><?php echo $product['name']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+
                             </td>
                             <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
@@ -150,10 +166,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
             <label for="notes">หมายเหตุ:</label>
             <textarea class="form-control" name="notes" id="notes"></textarea>
         </div>
-        <div class="form-group">
-            <label for="internal-notes">โน้ตภายในบริษัท:</label>
-            <textarea class="form-control" name="internal_notes" id="internal-notes"></textarea>
-        </div>
+
     </div>
     <div class="col-md-6">
         <div class="form-group">
@@ -187,8 +200,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
     const productPrices = {
         <?php foreach ($products as $product): ?> 
             "<?php echo $product['id']; ?>": "<?php echo $product['sale_price']; ?>",
-        <?php endforeach; ?>
-    };
+        <?php endforeach; ?> };
 
     function addRow() {
     var table = document.getElementById("product-rows");

@@ -157,7 +157,7 @@ function find_orders_by_user($user_id) {
   $sql  = "SELECT * FROM sales WHERE user_id = '{$user_id}'";
   return find_by_sql($sql);
 }
-// ฟังก์ชันสำหรับดึงข้อมูลคำสั่งซื้อทั้งหมด
+
 // ฟังก์ชันสำหรับดึงข้อมูลคำสั่งซื้อทั้งหมด
 function find_all_orders() {
   global $db;
@@ -169,6 +169,8 @@ function find_all_orders() {
   $result = $db->query($sql);
   return $result;
 }
+
+
 
 
 

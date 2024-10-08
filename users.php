@@ -8,6 +8,7 @@
 // ดึงข้อมูลผู้ใช้ทั้งหมดจากฐานข้อมูล
  $all_users = find_all_user();
 ?>
+
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
    <div class="col-md-12">
@@ -57,7 +58,7 @@
                 <a href="edit_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไข" >
                   <i class="glyphicon glyphicon-pencil"></i>
                </a>
-                <a href="delete_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-danger" data-toggle="tooltip" title="ลบ" disabled>
+                <a href="delete_user.php?id=<?php echo (int)$a_user['id'];?>" class="btn btn-sm btn-danger" data-toggle="tooltip" title="ลบ" >
                   <i class="glyphicon glyphicon-remove"></i>
                 </a>
                 </div>

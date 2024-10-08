@@ -204,7 +204,7 @@ function page_require_level($require_level)
   elseif ($current_user['user_level'] <= (int)$require_level):
     return true;
   else:
-    $session->msg("d", "Sorry! you dont have permission to view the page.");
+    $session->msg("d", "ขอโทษ! คุณไม่ได้รับอนุญาตให้ดูเพจ");
     redirect('home.php', false);
   endif;
 }
@@ -298,7 +298,7 @@ function find_all_sale() {
     $sql .= "FROM sales ";
     $sql .= "JOIN products ON sales.product_id = products.id ";
     $sql .= "JOIN delivery_company ON sales.delivery_company_id = delivery_company.id ";
-    $sql .= "JOIN customers ON sales.customer_id = customers.id ";  // ตรวจสอบว่ามีการ JOIN ตาราง customers อย่างถูกต้อง
+    $sql .= "JOIN customers ON sales.customer_id = customers.id ";  
     $sql .= "ORDER BY sales.id DESC";
     return find_by_sql($sql);
 }
