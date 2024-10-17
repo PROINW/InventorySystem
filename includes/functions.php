@@ -92,11 +92,28 @@ function total_price($totals)
 /*--------------------------------------------------------------*/
 function read_date($str)
 {
-  if ($str)
-    return date('F j, Y, g:i:s a', strtotime($str));
-  else
+  if ($str) {
+    // กำหนดชื่อเดือนเป็นภาษาไทย
+    $thai_months = [
+      1 => 'มกราคม', 2 => 'กุมภาพันธ์', 3 => 'มีนาคม', 4 => 'เมษายน',
+      5 => 'พฤษภาคม', 6 => 'มิถุนายน', 7 => 'กรกฎาคม', 8 => 'สิงหาคม',
+      9 => 'กันยายน', 10 => 'ตุลาคม', 11 => 'พฤศจิกายน', 12 => 'ธันวาคม'
+    ];
+
+    // แปลงวันที่
+    $timestamp = strtotime($str);
+    $day = date('j', $timestamp); // วันที่
+    $month = $thai_months[(int)date('m', $timestamp)]; // แปลงเป็นชื่อเดือนภาษาไทย
+    $year = date('Y', $timestamp) + 543; // ปี พ.ศ.
+    // $time = date('g:i:s a', $timestamp); // เวลา
+
+    // ส่งผลลัพธ์กลับในรูปแบบ วัน เดือน พ.ศ. เวลา
+    return "$day $month $year";
+  } else {
     return null;
+  }
 }
+
 /*--------------------------------------------------------------*/
 /* Function for  Readable Make date time
 /*--------------------------------------------------------------*/
@@ -129,16 +146,18 @@ function get_sales_data($type = 'monthly') {
   global $db;
 
   if ($type == 'monthly') {
-    $sql  = "SELECT MONTH(date) as month, SUM(qty * price) as total_sales";
-    $sql .= " FROM sales";
-    $sql .= " WHERE YEAR(date) = YEAR(CURDATE())"; // ดึงข้อมูลเฉพาะปีปัจจุบัน
-    $sql .= " GROUP BY MONTH(date)";
-    $sql .= " ORDER BY MONTH(date)";
+    // ดึงข้อมูลยอดรวมใบเสนอราคารายเดือน
+    $sql  = "SELECT MONTH(sale_date) as month, SUM(subtotal) as total_sales";
+    $sql .= " FROM quotes"; // เปลี่ยนจาก sales เป็น quotes
+    $sql .= " WHERE YEAR(sale_date) = YEAR(CURDATE())"; // ดึงข้อมูลเฉพาะปีปัจจุบัน
+    $sql .= " GROUP BY MONTH(sale_date)";
+    $sql .= " ORDER BY MONTH(sale_date)";
   } elseif ($type == 'yearly') {
-    $sql  = "SELECT YEAR(date) as year, SUM(qty * price) as total_sales";
-    $sql .= " FROM sales";
-    $sql .= " GROUP BY YEAR(date)";
-    $sql .= " ORDER BY YEAR(date)";
+    // ดึงข้อมูลยอดรวมใบเสนอราคารายปี
+    $sql  = "SELECT YEAR(sale_date) as year, SUM(subtotal) as total_sales";
+    $sql .= " FROM quotes"; // เปลี่ยนจาก sales เป็น quotes
+    $sql .= " GROUP BY YEAR(sale_date)";
+    $sql .= " ORDER BY YEAR(sale_date)";
   }
 
   $result = $db->query($sql);
@@ -152,14 +171,12 @@ function get_sales_data($type = 'monthly') {
 
   return $data;
 }
-function find_orders_by_user($user_id) {
-  global $db;
-  $sql  = "SELECT * FROM sales WHERE user_id = '{$user_id}'";
-  return find_by_sql($sql);
-}
+
+
 
 // ฟังก์ชันสำหรับดึงข้อมูลคำสั่งซื้อทั้งหมด
-function find_all_orders() {
+function find_all_orders()
+{
   global $db;
   $sql  = "SELECT sales.id, products.name AS product_name, customers.name AS customer_name, ";
   $sql .= "sales.qty, sales.price, sales.date, sales.status ";
@@ -169,12 +186,41 @@ function find_all_orders() {
   $result = $db->query($sql);
   return $result;
 }
+// ฟังก์ชันที่ดึงใบเสนอราคาพร้อมจำนวนสินค้า
+function find_all_quotes_with_quantity()
+{
+  global $db;
+  $sql  = "SELECT quotes.*, SUM(quote_items.quantity) AS total_qty ";
+  $sql .= "FROM quotes ";
+  $sql .= "LEFT JOIN quote_items ON quotes.id = quote_items.quote_id ";
+  $sql .= "GROUP BY quotes.id";
+  return find_by_sql($sql);
+}
+function monthlyQuotes($year) {
+  global $db;
+  $sql  = "SELECT products.name, SUM(quote_items.quantity) as qty, SUM(quote_items.total) as total, quotes.sale_date ";
+  $sql .= "FROM quotes ";
+  $sql .= "JOIN quote_items ON quotes.id = quote_items.quote_id ";
+  $sql .= "JOIN products ON quote_items.product_id = products.id ";
+  $sql .= "WHERE YEAR(quotes.sale_date) = '{$year}' ";
+  $sql .= "GROUP BY MONTH(quotes.sale_date), products.name ";
+  $sql .= "ORDER BY MONTH(quotes.sale_date) ASC";
+  return find_by_sql($sql);
+}
+function get_quote_sales_data($period) {
+  global $db;
+  if ($period == 'monthly') {
+      $sql = "SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, SUM(total) AS total_sales
+              FROM quotes
+              WHERE created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR)
+              GROUP BY month";
+  } elseif ($period == 'yearly') {
+      $sql = "SELECT YEAR(created_at) AS year, SUM(total) AS total_sales
+              FROM quotes
+              GROUP BY year";
+  }
 
-
-
-
-
-
-
+  return find_by_sql($sql);
+}
 
 

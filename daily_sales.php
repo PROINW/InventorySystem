@@ -1,15 +1,23 @@
 <?php
-  $page_title = 'ยอดขายรายวัน';
-  require_once('includes/load.php');
-  // ตรวจสอบระดับสิทธิ์ของผู้ใช้ในการดูหน้านี้
-   page_require_level(3);
+$page_title = 'ยอดขายรายวัน';
+require_once('includes/load.php');
+// ตรวจสอบระดับสิทธิ์ของผู้ใช้ในการดูหน้านี้
+page_require_level(3);
 ?>
 
 <?php
- $year  = date('Y');
- $month = date('m');
- $sales = dailySales($year, $month);
+// ดึงข้อมูลใบเสนอราคาตามปีและเดือนปัจจุบัน
+$year  = date('Y');
+$month = date('m');
+
+// ฟังก์ชันเพื่อดึงข้อมูลใบเสนอราคาและคำนวณราคารวมของแต่ละสินค้า
+$sales = find_by_sql("SELECT q.id, q.sale_date, p.name, qi.quantity, (qi.quantity * qi.price) AS total 
+                      FROM quotes q
+                      LEFT JOIN quote_items qi ON q.id = qi.quote_id
+                      LEFT JOIN products p ON qi.product_id = p.id
+                      WHERE YEAR(q.sale_date) = '{$year}' AND MONTH(q.sale_date) = '{$month}'");
 ?>
+
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
   <div class="col-md-6">
@@ -38,13 +46,13 @@
           </thead>
           <tbody>
             <?php foreach ($sales as $sale): ?>
-            <tr>
-              <td class="text-center"><?php echo count_id(); ?></td>
-              <td><?php echo remove_junk($sale['name']); ?></td>
-              <td class="text-center"><?php echo (int)$sale['qty']; ?></td>
-              <td class="text-center"><?php echo remove_junk($sale['total_saleing_price']); ?></td>
-              <td class="text-center"><?php echo $sale['date']; ?></td>
-            </tr>
+              <tr>
+                <td class="text-center"><?php echo count_id(); ?></td>
+                <td><?php echo remove_junk($sale['name']); ?></td>
+                <td class="text-center"><?php echo (int)$sale['quantity']; ?></td>
+                <td class="text-center"><?php echo number_format($sale['total'], 2); ?></td> <!-- ราคารวมของแต่ละรายการสินค้า -->
+                <td class="text-center"><?php echo read_date($sale['sale_date']); ?></td>
+              </tr>
             <?php endforeach; ?>
           </tbody>
         </table>

@@ -392,5 +392,23 @@ function find_all_where($table, $column, $value) {
   $sql .= " WHERE " . $db->escape($column) . "='" . $db->escape($value) . "'";
   return find_by_sql($sql);
 }
+function find_recent_production_orders($limit) {
+  global $db;
+  $sql  = "SELECT * FROM production_orders ";
+  $sql .= "ORDER BY created_at DESC ";
+  $sql .= "LIMIT " . (int)$limit;
+  return find_by_sql($sql);
+}
+function find_top_produced_products($limit) {
+  global $db;
+  $sql  = "SELECT products.name, COUNT(production_orders.id) AS production_count, SUM(production_orders.quantity) AS total_production_quantity ";
+  $sql .= "FROM production_orders ";
+  $sql .= "JOIN products ON production_orders.product_id = products.id ";
+  $sql .= "GROUP BY production_orders.product_id ";
+  $sql .= "ORDER BY total_production_quantity DESC "; // จัดเรียงตามจำนวนที่ผลิตมากที่สุด
+  $sql .= "LIMIT " . (int)$limit;
+  return find_by_sql($sql);
+}
+
 
 

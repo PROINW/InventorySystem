@@ -6,7 +6,7 @@ page_require_level(1);
 // นับจำนวนหมวดหมู่, สินค้า, ยอดขาย และผู้ใช้ในระบบ
 $c_categorie     = count_by_id('categories');
 $c_product       = count_by_id('products');
-$c_sale          = count_by_id('sales');
+$c_sale          = count_by_id('quotes');
 $c_user          = count_by_id('users');
 
 
@@ -15,8 +15,8 @@ $recent_products = find_recent_product_added('5');
 $recent_sales    = find_recent_sale_added('5');
 
 // ดึงข้อมูลยอดขายสำหรับกราฟยอดขายรายเดือนและรายปี
-$sales_data_month = get_sales_data('monthly'); 
-$sales_data_year = get_sales_data('yearly');   
+$sales_data_month = get_sales_data('monthly');
+$sales_data_year = get_sales_data('yearly');
 ?>
 <?php include_once('layouts/header.php'); ?>
 
@@ -79,7 +79,7 @@ $sales_data_year = get_sales_data('yearly');
         </div>
         <div class="panel-value pull-right">
           <h2 class="margin-top"> <?php echo $c_sale['total']; ?></h2>
-          <p class="text-muted">ยอดขาย</p>
+          <p class="text-muted">ยอดขายรวม</p>
         </div>
       </div>
     </div>
@@ -101,7 +101,7 @@ $sales_data_year = get_sales_data('yearly');
       </div>
     </div>
   </div>
-  
+
   <!-- กราฟแสดงยอดขายรายปี -->
   <div class="col-md-6">
     <div class="panel panel-default">
@@ -125,7 +125,7 @@ $sales_data_year = get_sales_data('yearly');
       <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>สินค้าขายดี</span>
+          <span>สินค้าผลิตมากที่สุด</span>
         </strong>
       </div>
       <div class="panel-body">
@@ -133,32 +133,34 @@ $sales_data_year = get_sales_data('yearly');
           <thead>
             <tr>
               <th>ชื่อสินค้า</th>
-              <th>ยอดขายทั้งหมด</th>
-              <th>จำนวนรวม</th>
-            <tr>
+              <th>จำนวนครั้งที่ผลิต</th>
+              <th>จำนวนรวมที่ผลิต</th>
+            </tr>
           </thead>
           <tbody>
-            <!-- แสดงรายการสินค้าขายดี 10 รายการ -->
-            <?php foreach ($products_sold as  $product_sold) : ?>
+            <!-- ดึงข้อมูลสินค้าที่ถูกสั่งผลิตมากที่สุด -->
+            <?php
+            $top_produced_products = find_top_produced_products('10'); // ฟังก์ชันใหม่สำหรับดึงสินค้าที่ถูกผลิตมากที่สุด
+            foreach ($top_produced_products as $product): ?>
               <tr>
-                <td><?php echo remove_junk(first_character($product_sold['name'])); ?></td>
-                <td><?php echo (int)$product_sold['totalSold']; ?></td>
-                <td><?php echo (int)$product_sold['totalQty']; ?></td>
+                <td><?php echo remove_junk(first_character($product['name'])); ?></td>
+                <td><?php echo (int)$product['production_count']; ?></td> <!-- จำนวนครั้งที่ถูกผลิต -->
+                <td><?php echo (int)$product['total_production_quantity']; ?></td> <!-- จำนวนรวมที่ถูกผลิต -->
               </tr>
             <?php endforeach; ?>
-          <tbody>
+          </tbody>
         </table>
       </div>
     </div>
   </div>
-  
+
   <!-- ยอดขายล่าสุด -->
   <div class="col-md-4">
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>ยอดขายล่าสุด</span>
+          <span>การสั่งผลิตล่าสุด</span>
         </strong>
       </div>
       <div class="panel-body">
@@ -167,23 +169,25 @@ $sales_data_year = get_sales_data('yearly');
             <tr>
               <th class="text-center" style="width: 50px;">#</th>
               <th class="text-center" style="width: 120px;">ชื่อสินค้า</th>
-              <th class="text-center" style="width: 50px;">วันที่</th>
-              <th class="text-center" style="width: 85px;">ยอดขายทั้งหมด</th>
+              <th class="text-center" style="width: 50px;">วันที่สั่งผลิต</th>
+              <th class="text-center" style="width: 85px;">จำนวน</th>
             </tr>
           </thead>
           <tbody>
-            <!-- แสดงยอดขายล่าสุด 5 รายการ -->
-            <?php foreach ($recent_sales as  $recent_sale) : ?>
+            <!-- ดึงข้อมูลการสั่งผลิตล่าสุด -->
+            <?php
+            // แทนที่ $recent_sales ด้วยการดึงข้อมูลจาก production_orders
+            $recent_production_orders = find_recent_production_orders('5'); // ฟังก์ชันใหม่สำหรับดึงข้อมูลการสั่งผลิตล่าสุด
+            foreach ($recent_production_orders as $production_order) : ?>
               <tr>
                 <td class="text-center"><?php echo count_id(); ?></td>
                 <td>
-                  <a href="edit_sale.php?id=<?php echo (int)$recent_sale['id']; ?>">
-                    <?php echo remove_junk(first_character($recent_sale['name'])); ?>
+                  <a href="edit_production_order.php?id=<?php echo (int)$production_order['id']; ?>">
+                    <?php echo remove_junk(first_character(find_by_id('products', $production_order['product_id'])['name'])); ?>
                   </a>
                 </td>
-                <td><?php echo remove_junk(ucfirst($recent_sale['date'])); ?></td>
-                <!-- คำนวณยอดขายทั้งหมด (จำนวน x ราคา) -->
-                <td>฿<?php echo number_format((float)$recent_sale['qty'] * (float)$recent_sale['price'], 2); ?></td>
+                <td class="text-center"><?php echo remove_junk($production_order['created_at']); ?></td>
+                <td class="text-center"><?php echo number_format((int)$production_order['quantity']); ?></td>
               </tr>
             <?php endforeach; ?>
           </tbody>
@@ -191,6 +195,7 @@ $sales_data_year = get_sales_data('yearly');
       </div>
     </div>
   </div>
+
 
   <!-- สินค้าที่เพิ่มล่าสุด -->
   <div class="col-md-4">
@@ -238,57 +243,57 @@ $sales_data_year = get_sales_data('yearly');
 
 <!-- สร้างกราฟยอดขายรายเดือนและรายปีด้วย Chart.js -->
 <script>
- const monthlySalesData = <?php echo json_encode($sales_data_month); ?>;
- const yearlySalesData = <?php echo json_encode($sales_data_year); ?>;
+  const monthlySalesData = <?php echo json_encode($sales_data_month); ?>;
+  const yearlySalesData = <?php echo json_encode($sales_data_year); ?>;
 
- const ctxMonthly = document.getElementById('monthlySalesChart').getContext('2d');
- const ctxYearly = document.getElementById('yearlySalesChart').getContext('2d');
+  const ctxMonthly = document.getElementById('monthlySalesChart').getContext('2d');
+  const ctxYearly = document.getElementById('yearlySalesChart').getContext('2d');
 
- // แปลงตัวเลขเดือนเป็นชื่อเดือนภาษาไทย
- const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
- monthlySalesData.labels = monthlySalesData.labels.map(month => monthNames[month - 1]);
+  // แปลงตัวเลขเดือนเป็นชื่อเดือนภาษาไทย
+  const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+  monthlySalesData.labels = monthlySalesData.labels.map(month => monthNames[month - 1]);
 
- // สร้างกราฟยอดขายรายเดือน
- let monthlySalesChart = new Chart(ctxMonthly, {
-   type: 'bar',
-   data: {
-     labels: monthlySalesData.labels,
-     datasets: [{
-       label: 'ยอดขายรายเดือน',
-       data: monthlySalesData.data,
-       backgroundColor: 'rgba(75, 192, 192, 0.2)',
-       borderColor: 'rgba(75, 192, 192, 1)',
-       borderWidth: 1
-     }]
-   },
-   options: {
-     scales: {
-       y: {
-         beginAtZero: true
-       }
-     }
-   }
- });
+  // สร้างกราฟยอดขายรายเดือน
+  let monthlySalesChart = new Chart(ctxMonthly, {
+    type: 'bar',
+    data: {
+      labels: monthlySalesData.labels,
+      datasets: [{
+        label: 'ยอดขายรายเดือน',
+        data: monthlySalesData.data,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 
- // สร้างกราฟยอดขายรายปี
- let yearlySalesChart = new Chart(ctxYearly, {
-   type: 'bar',
-   data: {
-     labels: yearlySalesData.labels,
-     datasets: [{
-       label: 'ยอดขายรายปี',
-       data: yearlySalesData.data,
-       backgroundColor: 'rgba(153, 102, 255, 0.2)',
-       borderColor: 'rgba(153, 102, 255, 1)',
-       borderWidth: 1
-     }]
-   },
-   options: {
-     scales: {
-       y: {
-         beginAtZero: true
-       }
-     }
-   }
- });
+  // สร้างกราฟยอดขายรายปี
+  let yearlySalesChart = new Chart(ctxYearly, {
+    type: 'bar',
+    data: {
+      labels: yearlySalesData.labels,
+      datasets: [{
+        label: 'ยอดขายรายปี',
+        data: yearlySalesData.data,
+        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 </script>

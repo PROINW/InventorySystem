@@ -51,8 +51,8 @@
     <ul class="nav submenu">
       <li><a href="save_invoice.php">ใบเสนอราคา</a> </li>
       <li><a href="quotes.php">รายการใบเสนอราคา</a> </li>
-      <li><a href="sales.php">จัดการการขาย</a> </li>
-      <li><a href="add_sale.php">เพิ่มการขาย</a> </li>
+      <li><a href="sales.php">การสั่งผลิต</a> </li>
+      <li><a href="production_orders_by_quote.php">รายการสั่งผลิต</a> </li>
       <li><a href="order_history.php">ประวัติการสั่งซื้อ</a> </li>
     </ul>
   </li>

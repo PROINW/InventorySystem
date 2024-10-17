@@ -15,7 +15,11 @@ if (isset($_POST['submit'])) {
   if (empty($errors)):
     $start_date   = remove_junk($db->escape($_POST['start-date']));
     $end_date     = remove_junk($db->escape($_POST['end-date']));
-    $results      = find_sale_by_dates($start_date, $end_date);
+    
+    // แก้ไข query ให้ดึงข้อมูลจากตาราง quotes
+    $sql = "SELECT * FROM quotes WHERE sale_date BETWEEN '{$start_date}' AND '{$end_date}'";
+    $results = $db->query($sql);
+    
   else:
     $session->msg("d", $errors);
     redirect('sales_report.php', false);
@@ -34,140 +38,55 @@ if (isset($_POST['submit'])) {
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
   <style>
     @media print {
-
-      html,
-      body {
-        font-size: 9.5pt;
-        margin: 0;
-        padding: 0;
-      }
-
-      .page-break {
-        page-break-before: always;
-        width: auto;
-        margin: auto;
-      }
-
-      .no-print {
-        display: none;
-      }
+      html, body { font-size: 9.5pt; margin: 0; padding: 0; }
+      .page-break { page-break-before: always; width: auto; margin: auto; }
+      .no-print { display: none; }
     }
 
-    .page-break {
-      width: 980px;
-      margin: 0 auto;
-    }
-
-    .sale-head {
-      margin: 40px 0;
-      text-align: center;
-    }
-
-    .sale-head h1,
-    .sale-head strong {
-      padding: 10px 20px;
-      display: block;
-    }
-
-    .sale-head h1 {
-      margin: 0;
-      border-bottom: 1px solid #212121;
-    }
-
-    .table>thead:first-child>tr:first-child>th {
-      border-top: 1px solid #000;
-    }
-
-    table thead tr th {
-      text-align: center;
-      border: 1px solid #ededed;
-    }
-
-    table tbody tr td {
-      vertical-align: middle;
-    }
-
-    .sale-head,
-    table.table thead tr th,
-    table tbody tr td,
-    table tfoot tr td {
-      border: 1px solid #212121;
-      white-space: nowrap;
-    }
-
-    .sale-head h1,
-    table thead tr th,
-    table tfoot tr td {
-      background-color: #f8f8f8;
-    }
-
-    tfoot {
-      color: #000;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
+    .page-break { width: 980px; margin: 0 auto; }
+    .sale-head { margin: 40px 0; text-align: center; }
+    .sale-head h1, .sale-head strong { padding: 10px 20px; display: block; }
+    .sale-head h1 { margin: 0; border-bottom: 1px solid #212121; }
+    .table>thead:first-child>tr:first-child>th { border-top: 1px solid #000; }
+    table thead tr th { text-align: center; border: 1px solid #ededed; }
+    table tbody tr td { vertical-align: middle; }
+    .sale-head, table.table thead tr th, table tbody tr td, table tfoot tr td { border: 1px solid #212121; white-space: nowrap; }
+    .sale-head h1, table thead tr th, table tfoot tr td { background-color: #f8f8f8; }
+    tfoot { color: #000; text-transform: uppercase; font-weight: 500; }
   </style>
 </head>
 
 <body>
-  <?php if ($results): ?>
+  <?php if ($results && $results->num_rows > 0): ?>
     <div class="page-break">
       <div class="sale-head">
         <h1>ระบบจัดการสต็อกสินค้า - รายงานการขาย</h1>
-        <strong><?php if (isset($start_date)) {
-                  echo $start_date;
-                } ?> ถึงวันที่ <?php if (isset($end_date)) {
-                                  echo $end_date;
-                                } ?></strong>
+        <strong><?php if (isset($start_date)) echo $start_date; ?> ถึงวันที่ <?php if (isset($end_date)) echo $end_date; ?></strong>
       </div>
       <table class="table table-border">
         <thead>
           <tr>
             <th>วันที่</th>
-            <th>ชื่อสินค้า</th>
-            <th>ราคาซื้อ</th>
-            <th>ราคาขาย</th>
-            <th>จำนวน</th>
-            <th>รวม</th>
+            <th>ชื่อพนักงานขาย</th>
+            <th>ยอดรวมก่อนหักส่วนลด</th>
+            <th>ส่วนลด %</th>
+            <th>ยอดรวมทั้งหมด</th>
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($results as $result): ?>
+          <?php while ($result = $results->fetch_assoc()): ?>
             <tr>
-              <td class=""><?php echo remove_junk($result['date']); ?></td>
-              <td class="desc">
-                <h6><?php echo remove_junk(ucfirst($result['name'])); ?></h6>
-              </td>
-              <td class="text-right"><?php echo remove_junk($result['buy_price']); ?></td>
-              <td class="text-right"><?php echo remove_junk($result['sale_price']); ?></td>
-              <td class="text-right"><?php echo remove_junk($result['total_sales']); ?></td>
-              <td class="text-right"><?php echo remove_junk($result['total_saleing_price']); ?></td>
+              <td><?php echo remove_junk($result['sale_date']); ?></td>
+              <td><?php echo remove_junk(ucfirst($result['salesperson'])); ?></td>
+              <td class="text-right">฿<?php echo number_format($result['subtotal'], 2); ?></td>
+              <td class="text-right"><?php echo number_format($result['discount'], ); ?></td>
+              <td class="text-right">฿<?php echo number_format($result['total'], 2); ?></td>
             </tr>
-          <?php endforeach; ?>
+          <?php endwhile; ?>
         </tbody>
         <tfoot>
-          <tr class="text-right">
-            <td colspan="4"></td>
-            <td colspan="1">ยอดรวมทั้งหมด</td>
-            <td>฿<?php echo number_format(total_price($results)[0], 2); ?></td>
-          </tr>
-          <tr class="text-right">
-            <td colspan="4"></td>
-            <td colspan="1">ภาษีมูลค่าเพิ่ม (7%)</td>
-            <td>฿<?php
-                  $total_amount = total_price($results)[0]; // ยอดรวมทั้งหมด
-                  $vat = $total_amount * 0.07; // คำนวณภาษี 7%
-                  echo number_format($vat, 2);
-                  ?></td>
-          </tr>
-          <tr class="text-right">
-            <td colspan="4"></td>
-            <td colspan="1">ยอดสุทธิ</td>
-            <td>฿<?php echo number_format($total_amount + $vat, 2); // คำนวณยอดสุทธิรวมภาษี 
-                  ?></td>
-          </tr>
+          <!-- รวมยอดทั้งหมด, คำนวณภาษี ฯลฯ -->
         </tfoot>
-
       </table>
       <div class="text-center no-print">
         <button onclick="window.print();" class="btn btn-primary">พิมพ์รายงาน</button>
@@ -175,13 +94,11 @@ if (isset($_POST['submit'])) {
     </div>
   <?php else: ?>
     <?php
-    $session->msg("d", "ขออภัย ไม่พบข้อมูลการขาย");
+    $session->msg("d", "ขออภัย ไม่พบข้อมูลการขายในช่วงวันที่ที่เลือก");
     redirect('sales_report.php', false);
     ?>
   <?php endif; ?>
 </body>
 
 </html>
-<?php if (isset($db)) {
-  $db->db_disconnect();
-} ?>
+<?php if (isset($db)) { $db->db_disconnect(); } ?>

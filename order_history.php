@@ -5,7 +5,12 @@ require_once('includes/load.php');
 page_require_level(3);
 
 // ดึงข้อมูลคำสั่งซื้อทั้งหมดจากฐานข้อมูล
-$orders = find_all_orders(); 
+$orders = find_by_sql("SELECT q.id as order_id, q.sale_date, q.total, p.name as product_name, c.name as customer_name, qi.quantity 
+                        FROM quotes q
+                        LEFT JOIN quote_items qi ON q.id = qi.quote_id
+                        LEFT JOIN products p ON qi.product_id = p.id
+                        LEFT JOIN customers c ON q.customer_id = c.id
+                        ORDER BY q.sale_date DESC"); 
 ?>
 <?php include_once('layouts/header.php'); ?>
 <link rel="stylesheet" href="libs/css/main.css" />
@@ -26,7 +31,7 @@ $orders = find_all_orders();
         </strong>
       </div>
       <div class="panel-body">
-        <table class="table ">
+        <table class="table">
           <thead class="custom-bg">
             <tr>
               <th class="text-center">#</th>
@@ -36,31 +41,19 @@ $orders = find_all_orders();
               <th class="text-center"> จำนวนสินค้า </th>
               <th class="text-center"> ราคารวม </th>
               <th class="text-center"> วันที่สั่งซื้อ </th>
-              <th class="text-center"> สถานะคำสั่งซื้อ </th>
             </tr>
           </thead>
           <tbody>
             <?php foreach ($orders as $order): ?>
               <tr>
                 <td class="text-center"><?php echo count_id(); ?></td>
-                <td><?php echo remove_junk($order['id']); ?></td>
-                <td class="text-center"><?php echo remove_junk($order['product_name']); ?></td>
-                <td class="text-center"><?php echo remove_junk($order['customer_name']); ?></td>
-                <td class="text-center"><?php echo (int)$order['qty']; ?></td>
-                <td class="text-center"><?php echo number_format((float)$order['price'], 2); ?></td>
-                <td class="text-center"><?php echo $order['date']; ?></td>
+                <td><?php echo remove_junk($order['order_id'] ?? ''); ?></td>
+                <td class="text-center"><?php echo remove_junk($order['product_name'] ?? ''); ?></td>
+                <td class="text-center"><?php echo remove_junk($order['customer_name'] ?? ''); ?></td>
+                <td class="text-center"><?php echo (int)($order['quantity'] ?? 0); ?></td>
+                <td class="text-center"><?php echo number_format((float)($order['total'] ?? 0), 2); ?></td>
                 <td class="text-center">
-                  <?php
-                  if ($order['status'] === 'Completed') {
-                    echo '<span class="custon-label label-success">เสร็จสมบูรณ์</span>';
-                  } elseif ($order['status'] === 'Pending') {
-                    echo '<span class="custon-label label-warning">รอดำเนินการ</span>';
-                  } elseif ($order['status'] === 'Cancelled') {
-                    echo '<span class="custon-label label-danger">ยกเลิก</span>';
-                  } else {
-                    echo '<span class="label label-default">ไม่ทราบสถานะ</span>';
-                  }
-                  ?>
+                  <?php echo $order['sale_date'] ? date('d/m/Y', strtotime($order['sale_date'])) : 'N/A'; ?>
                 </td>
               </tr>
             <?php endforeach; ?>

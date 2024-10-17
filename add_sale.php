@@ -1,148 +1,204 @@
 <?php
+$page_title = 'ใบเสร็จรับเงิน/ใบกำกับภาษี';
 require_once('includes/load.php');
-require_once('includes/session.php');
-require_once('includes/database.php');
 
-// ตรวจสอบการเข้าสู่ระบบ
-if (!$session->isUserLoggedIn(true)) {
-  redirect('index.php', false);
-}
+// ตรวจสอบระดับสิทธิ์ของผู้ใช้ในการดูหน้านี้
+page_require_level(2);
 
-// ดึงรายการสินค้าทั้งหมด
-$products = find_all('products');
+// ดึงข้อมูลใบเสนอราคาที่เกี่ยวข้อง
+if (isset($_GET['id'])) {
+    $quote_id = $_GET['id'];
+    $quote = find_by_id('quotes', $quote_id);
+    $quote_items = find_all_where('quote_items', 'quote_id', $quote_id);
+    $customer = find_by_id('customers', $quote['customer_id']);
 
-// ดึงข้อมูลบริษัทจัดส่งทั้งหมด
-$companies = find_all('delivery_company');
-
-// ดึงรายชื่อลูกค้าทั้งหมด
-$customers = find_all('customers');
-
-// เมื่อกดบันทึกการขาย
-if (isset($_POST['add_sale'])) {
-    $customer_id = $db->escape($_POST['customer_id']); // รับข้อมูล ID ของลูกค้า
-    $product_ids = $_POST['product_ids'];
-    $quantities = $_POST['quantities'];
-    $prices = $_POST['prices'];
-    $dates = $_POST['dates'];
-    $delivery_company_ids = $_POST['delivery_company_ids'];
-
-    for ($i = 0; $i < count($product_ids); $i++) {
-        $p_id = $db->escape($product_ids[$i]);
-        $quantity = $db->escape($quantities[$i]);
-        $price = $db->escape($prices[$i]);
-        $date = $db->escape($dates[$i]);
-        $delivery_company_id = $db->escape($delivery_company_ids[$i]);
-
-        $sql  = "INSERT INTO sales (product_id, qty, price, date, delivery_company_id, customer_id)";
-        $sql .= " VALUES ('{$p_id}', '{$quantity}', '{$price}', '{$date}', '{$delivery_company_id}', '{$customer_id}')";
-
-        if (!$db->query($sql)) {
-            $session->msg('d', 'ขออภัย! ไม่สามารถเพิ่มการขายได้');
-            redirect('add_sale.php', false);
-        }
+    if (!$quote || !$customer || !$quote_items) {
+        $session->msg('d', 'ไม่พบข้อมูลที่ต้องการ');
+        redirect('quotes.php', false);
     }
-
-    $session->msg('s', "เพิ่มการขายเรียบร้อยแล้ว.");
-    redirect('add_sale.php', false);
+} else {
+    $session->msg('d', 'Missing quote ID.');
+    redirect('quotes.php', false);
 }
+
+// คำนวณภาษีมูลค่าเพิ่ม 7%
+$vat_rate = 0.07;
+$subtotal = $quote['subtotal'];
+$vat_amount = $subtotal * $vat_rate;
+$total_with_vat = $subtotal + $vat_amount;
+
 ?>
 
-<?php include_once('layouts/header.php'); ?>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบเสร็จรับเงิน/ใบกำกับภาษี</title>
+    <style>
+        body {
+            font-family: 'TH SarabunPSK', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading clearfix">
-        <strong>
-          <span class="glyphicon glyphicon-th"></span>
-          <span>รายการสินค้าทั้งหมด</span>
-        </strong>
-      </div>
-      <div class="panel-body">
-        <form method="post" action="add_sale.php">
-          <div class="form-group">
-            <label for="customer_id">เลือกผู้สั่งซื้อ</label>
-            <select class="form-control" name="customer_id">
-              <option value="">เลือกผู้สั่งซื้อ</option>
-              <?php foreach ($customers as $customer): ?>
-                <option value="<?php echo $customer['id']; ?>"><?php echo $customer['name']; ?></option>
-              <?php endforeach; ?>
-            </select>
-          </div>
-          <table class="table table-bordered">
-            <thead>
-              <th> รายการ </th>
-              <th> ราคา </th>
-              <th> จำนวน </th>
-              <th> ราคารวม </th>
-              <th> วันที่ </th>
-              <th> บริษัทจัดส่ง </th> 
-              <th> ลบ </th>
-            </thead>
-            <tbody id="product_info">
-              <!-- แสดงรายการสินค้าทั้งหมด -->
-              <?php if (!empty($products)): ?>
-                <?php foreach ($products as $product): ?>
-                  <tr>
-                    <td><?php echo $product['name']; ?></td>
-                    <input type="hidden" name="product_ids[]" value="<?php echo $product['id']; ?>">
-                    <td><input type="text" class="form-control" name="prices[]" value="<?php echo $product['sale_price']; ?>" readonly></td>
-                    <td><input type="number" class="form-control" name="quantities[]" value="1" oninput="calculateTotal(this)"></td>
-                    <td><input type="text" class="form-control total" name="totals[]" value="<?php echo $product['sale_price']; ?>" readonly></td>
-                    <td><input type="date" class="form-control" name="dates[]" value="<?php echo date('Y-m-d'); ?>"></td>
-                    <td>
-                      <select class="form-control" name="delivery_company_ids[]">
-                        <option value="">เลือกบริษัทจัดส่ง</option>
-                        <?php foreach ($companies as $company): ?>
-                          <option value="<?php echo $company['id']; ?>"><?php echo $company['name']; ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </td>
-                    <td><button type="button" class="btn btn-danger remove-item">ลบ</button></td>
-                  </tr>
-                <?php endforeach; ?>
-              <?php else: ?>
-                <tr>
-                  <td colspan="7">ไม่พบสินค้าในฐานข้อมูล</td>
-                </tr>
-              <?php endif; ?>
-            </tbody>
-          </table>
-          <button type="submit" name="add_sale" class="btn btn-primary">บันทึกการขาย</button>
-        </form>
-      </div>
+        .container {
+            background: #fff;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-right {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 30px;
+            text-align: center;
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        .quote-info, .company-info, .customer-info {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .signature-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .signature-line {
+            margin-top: 30px;
+            border-top: 1px dotted black;
+            width: 40%;
+            margin: 0 auto;
+        }
+
+        .note-section {
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        @media print {
+            .btn-primary {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: white;
+            }
+
+            .container {
+                box-shadow: none;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ส่วนหัวของใบเสร็จ -->
+    <h1>ใบเสร็จรับเงิน/ใบกำกับภาษี</h1>
+    <div class="company-info">
+        <strong>บริษัท ผู้ขายทดสอบ จำกัด (สำนักงานใหญ่)</strong><br>
+        999 หมู่ 999 ถ.ทดสอบ 999 แขวงทดสอบ<br>
+        เขตบางกะทัด กรุงเทพมหานคร 10500<br>
+        เลขที่ผู้เสียภาษี 1234567890999<br>
+        โทร. 0912345678 อีเมล seller@test.com
     </div>
-  </div>
+
+    <!-- ข้อมูลลูกค้า -->
+    <div class="customer-info">
+        <strong>ลูกค้า:</strong> <?php echo $customer['name']; ?><br>
+        <strong>ที่อยู่:</strong> <?php echo nl2br($customer['details']); ?><br>
+        <strong>เลขที่ผู้เสียภาษี:</strong> <?php echo $customer['tax_id']; ?><br>
+        <strong>โทร:</strong> <?php echo $customer['phone']; ?><br>
+        <strong>อีเมล:</strong> <?php echo $customer['email']; ?>
+    </div>
+
+    <!-- รายการสินค้า -->
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>รายการสินค้า / บริการ</th>
+                <th>จำนวน</th>
+                <th>หน่วย</th>
+                <th>ราคาต่อหน่วย</th>
+                <th>จำนวนเงิน</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($quote_items as $key => $item): ?>
+            <tr>
+                <td><?php echo $key + 1; ?></td>
+                <td><?php
+                    $product = find_by_id('products', $item['product_id']);
+                    echo $product ? $product['name'] : 'ไม่พบสินค้า'; 
+                ?></td>
+                <td><?php echo $item['quantity']; ?></td>
+                <td>ตัว</td>
+                <td><?php echo number_format($item['price'], 2); ?></td>
+                <td><?php echo number_format($item['total'], 2); ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <!-- สรุปยอดรวม -->
+    <table>
+        <tr>
+            <td>ราคาสินค้าทั้งหมดก่อนภาษีมูลค่าเพิ่ม</td>
+            <td><?php echo number_format($subtotal, 2); ?> บาท</td>
+        </tr>
+        <tr>
+            <td>ภาษีมูลค่าเพิ่ม 7%</td>
+            <td><?php echo number_format($vat_amount, 2); ?> บาท</td>
+        </tr>
+        <tr>
+            <td><strong>จำนวนเงินรวมทั้งสิ้น (รวมภาษีมูลค่าเพิ่ม)</strong></td>
+            <td><strong><?php echo number_format($total_with_vat, 2); ?> บาท</strong></td>
+        </tr>
+    </table>
+
+    <!-- หมายเหตุ -->
+    <div class="note-section">
+        <strong>หมายเหตุ:</strong> <?php echo nl2br($quote['notes']); ?>
+    </div>
+
+    <!-- ลายเซ็นต์ -->
+    <div class="signature-section">
+        <div class="signature-line"></div>
+        <strong>ผู้รับเงิน</strong>
+    </div>
+
 </div>
 
-<?php include_once('layouts/footer.php'); ?>
-
-<!-- Script สำหรับลบรายการและคำนวณราคารวม -->
-<script>
-$(document).ready(function() {
-  // ลบรายการ
-  $(document).on('click', '.remove-item', function() {
-    $(this).closest('tr').remove();
-    calculateGrandTotal();  // อัปเดตราคารวมใหม่หลังจากลบรายการ
-  });
-});
-
-// คำนวณราคารวมเมื่อจำนวนถูกเปลี่ยน
-function calculateTotal(element) {
-  var row = $(element).closest('tr');
-  var price = row.find('input[name="prices[]"]').val();
-  var quantity = row.find('input[name="quantities[]"]').val();
-  var total = price * quantity;
-  row.find('input[name="totals[]"]').val(total.toFixed(2));  // คำนวณราคารวม
-  calculateGrandTotal();  // อัปเดตราคารวมทั้งหมด
-}
-
-// คำนวณราคารวมทั้งหมดของรายการสินค้า
-function calculateGrandTotal() {
-  var grandTotal = 0;
-  $('input[name="totals[]"]').each(function() {
-    grandTotal += parseFloat($(this).val()) || 0;
-  });
-  $('#grand_total').text(grandTotal.toFixed(2));
-}
-</script>
+</body>
+</html>

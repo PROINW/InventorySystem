@@ -33,7 +33,12 @@ include_once('layouts/header.php');
                                 <td><?php echo $quote['sale_date']; ?></td>
                                 <td><?php echo $quote['total']; ?></td>
                                 <td>
-                                    <a href="view_quote.php?id=<?php echo $quote['id']; ?>" class="btn btn-primary">ดู</a>
+                                    <a href="view_quote.php?id=<?php echo $quote['id']; ?>" class="btn btn-success" title="ดูใบเสนอราคา" data-toggle="tooltip">
+                                        <span class="glyphicon glyphicon-eye-open"></span> ดูใบเสนอราคา
+                                    </a>
+                                    <a href="receipt_invoice.php?id=<?php echo $quote['id']; ?>" class="btn btn-warning" title="ใบเสร็จรับเงิน" data-toggle="tooltip">
+                                        <span class="glyphicon glyphicon-eye-open"></span> ใบเสร็จรับเงิน
+                                    </a>
                                     <a href="delete_quote.php?id=<?php echo $quote['id']; ?>" class="btn btn-danger" onclick="return confirm('คุณแน่ใจหรือว่าต้องการลบใบเสนอราคานี้?');">ลบ</a>
                                 </td>
                             </tr>

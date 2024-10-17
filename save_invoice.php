@@ -96,7 +96,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                 </select>
 
                             </td>
-                            <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
+                            <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
                             <td>
@@ -114,7 +114,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                 </select>
 
                             </td>
-                            <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
+                            <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
                             <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
@@ -130,7 +130,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                 </select>
 
                             </td>
-                            <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
+                            <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
                             <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
@@ -146,7 +146,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                                 </select>
 
                             </td>
-                            <td><input type="number" name="quantity[]" class="form-control" value="1.00" oninput="calculateTotal()"></td>
+                            <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
                             <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>

@@ -151,7 +151,6 @@ $total_with_vat = $quote['subtotal'] + $vat_amount;
 
     <!-- ข้อมูลบริษัทและลูกค้า -->
     <div class="company-info">
-        <strong>ผู้ออก:</strong><br>
         <?php echo $company_name; ?><br>
         <?php echo nl2br($company_address); ?><br>
         โทร: <?php echo $company_phone; ?><br>
