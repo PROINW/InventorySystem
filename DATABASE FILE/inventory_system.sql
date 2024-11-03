@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2024 at 08:10 PM
+-- Generation Time: Nov 03, 2024 at 03:23 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,41 +42,6 @@ INSERT INTO `categories` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `clients`
---
-
-CREATE TABLE `clients` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `address` text DEFAULT NULL,
-  `postal_code` varchar(10) DEFAULT NULL,
-  `tax_id` varchar(20) DEFAULT NULL,
-  `branch_no` varchar(50) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `clients`
---
-
-INSERT INTO `clients` (`id`, `name`, `address`, `postal_code`, `tax_id`, `branch_no`, `created_at`) VALUES
-(1, 'A', '71/1', '11140', '12345', 'ประเทศไทย', '2024-08-21 10:57:57'),
-(2, '', '', '', '', '', '2024-08-21 11:00:49'),
-(3, '', '', '', '', '', '2024-08-21 11:05:59'),
-(4, 'A', '', '', '', '', '2024-08-21 11:24:31'),
-(5, '', '', '', '', '', '2024-08-21 11:24:38'),
-(6, '', '', '', '', '', '2024-08-21 11:26:01'),
-(7, '', '', '', '', '', '2024-08-21 11:30:52'),
-(8, 'กฟหกหฟกหฟก', 'หฟกหฟกหฟ', 'ฟหกหฟกหฟก', 'ฟหกหฟกห', 'ฟกหฟกฟก', '2024-08-21 11:31:13'),
-(9, 'หกหดก', 'หกดกหด', 'หกดกหด', 'หกหกดกหด', 'หกกหกหด', '2024-08-22 11:22:20'),
-(10, 'A', '71/1', '11140', '112233', 'ประเทศไทย', '2024-08-22 11:42:16'),
-(11, 'A', '71/1', '11140', '112233', 'ประเทศไทย', '2024-08-22 11:42:55'),
-(12, 'A', '71/1', '11140', '112233', 'ประเทศไทย', '2024-08-22 11:44:45'),
-(13, 'A', '71/1', '11140', '112233', 'ประเทศไทย', '2024-08-22 11:46:38');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `customers`
 --
 
@@ -87,6 +52,7 @@ CREATE TABLE `customers` (
   `postal_code` varchar(10) DEFAULT NULL,
   `tax_id` varchar(20) DEFAULT NULL,
   `branch_no` varchar(10) DEFAULT NULL,
+  `phone_number` varchar(15) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -94,11 +60,28 @@ CREATE TABLE `customers` (
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `name`, `details`, `postal_code`, `tax_id`, `branch_no`, `created_at`) VALUES
-(201, 'ทวีทรัพย์ เมฆเกลื่อน', '71/1', '11140', '11111', 'ประเทศไทย', '2024-09-30 05:08:14'),
-(202, 'ทวีทรัพย์ เมฆเกลื่อน', '', '11140', '12345', 'ประเทศไทย', '2024-09-30 06:22:49'),
-(203, 'ทวีทรัพย์ เมฆเกลื่อน', '', '', '', '', '2024-09-30 06:29:33'),
-(204, 'AA', '', '', '', '', '2024-10-08 16:14:29');
+INSERT INTO `customers` (`id`, `name`, `details`, `postal_code`, `tax_id`, `branch_no`, `phone_number`, `created_at`) VALUES
+(201, 'ทวีทรัพย์ เมฆเกลื่อน', '71/1', '11140', '11111', 'ประเทศไทย', NULL, '2024-09-30 05:08:14'),
+(202, 'ทวีทรัพย์ เมฆเกลื่อน', '', '11140', '12345', 'ประเทศไทย', NULL, '2024-09-30 06:22:49'),
+(203, 'ทวีทรัพย์ เมฆเกลื่อน', '', '', '', '', NULL, '2024-09-30 06:29:33'),
+(204, 'AA', '', '', '', '', NULL, '2024-10-08 16:14:29'),
+(205, 'ทวีทรัพย์ เมฆเกลื่อน', '71/1', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-09 11:07:36'),
+(206, 'AAA', '71/1', '11140', '11111111111111', 'ประเทศไทย', NULL, '2024-10-09 12:54:04'),
+(207, 'ทวีทรัพย์ เมฆเกลื่อน', '71/1', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-09 13:00:55'),
+(208, 'A', '', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-09 13:01:47'),
+(209, 'ทวีทรัพย์ เมฆเกลื่อน', '', '', '', '', NULL, '2024-10-12 15:46:45'),
+(210, 'A', '71/1', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-12 15:54:01'),
+(211, 'ทวีทรัพย์ เมฆเกลื่อน', '71/1', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-12 16:31:00'),
+(212, 'ทวีทรัพย์ เมฆเกลื่อน', '1111', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-14 16:06:40'),
+(213, 'A', '111', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-14 16:10:30'),
+(214, 'ทวีทรัพย์ เมฆเกลื่อน', '71/1', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-16 05:13:58'),
+(215, 'ทวีทรัพย์ เมฆเกลื่อน', '1/1', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-16 16:05:19'),
+(216, 'ทวีทรัพย์ เมฆเกลื่อน', '', '11140', '12345', 'ประเทศไทย', NULL, '2024-10-17 09:48:35'),
+(217, 'dqwdqw', 'dqwdqw', 'dqwdqwd', 'qwdqwd', 'qwdwqdwqd', NULL, '2024-10-17 12:55:58'),
+(218, 'AAA', '71/1', '11140', '12345', 'ไทย', NULL, '2024-10-27 15:02:39'),
+(219, 'AAA', '71/1', '11140', '12345', 'ไทย', NULL, '2024-10-28 01:55:23'),
+(220, 'AAA', '71/1', '11140', '12345', 'ไทย', '0958833255', '2024-10-28 01:58:07'),
+(221, 'AAA', '71/1', '11140', '12345', 'ไทย', '0958833255', '2024-10-28 02:03:31');
 
 -- --------------------------------------------------------
 
@@ -153,6 +136,58 @@ INSERT INTO `media` (`id`, `file_name`, `file_type`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `production_orders`
+--
+
+CREATE TABLE `production_orders` (
+  `id` int(11) NOT NULL,
+  `product_id` int(11) UNSIGNED NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `status` varchar(50) DEFAULT 'Pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `quote_id` int(11) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `production_orders`
+--
+
+INSERT INTO `production_orders` (`id`, `product_id`, `quantity`, `status`, `created_at`, `updated_at`, `quote_id`) VALUES
+(13, 1, 50, 'Pending', '2024-10-09 13:01:03', '2024-10-10 10:14:44', 226),
+(14, 2, 50, 'Pending', '2024-10-09 13:01:03', '2024-10-10 10:14:47', 226),
+(15, 3, 50, 'Pending', '2024-10-09 13:01:03', '2024-10-10 10:14:50', 226),
+(16, 4, 50, 'Pending', '2024-10-09 13:01:04', '2024-10-10 10:14:53', 226),
+(17, 1, 500, 'Completed', '2024-10-09 13:02:20', '2024-10-10 10:09:13', 227),
+(18, 2, 500, 'Completed', '2024-10-09 13:02:20', '2024-10-10 10:09:16', 227),
+(19, 1, 500, 'Completed', '2024-10-09 13:05:07', '2024-10-10 10:09:23', 227),
+(20, 2, 500, 'Completed', '2024-10-09 13:05:07', '2024-10-10 10:09:19', 227),
+(21, 1, 500, 'Pending', '2024-10-12 15:45:57', '2024-10-12 15:45:57', 227),
+(22, 2, 500, 'Pending', '2024-10-12 15:45:57', '2024-10-12 15:45:57', 227),
+(23, 1, 500, 'Completed', '2024-10-12 16:31:32', '2024-10-12 16:32:00', 230),
+(24, 1, 500, 'Completed', '2024-10-12 16:31:32', '2024-10-12 16:32:02', 230),
+(25, 1, 500, 'Completed', '2024-10-12 16:31:32', '2024-10-12 16:32:05', 230),
+(26, 1, 500, 'Completed', '2024-10-12 16:31:32', '2024-10-12 16:32:08', 230),
+(27, 1, 500, 'Pending', '2024-10-14 12:04:21', '2024-10-14 12:04:21', 230),
+(28, 1, 500, 'Pending', '2024-10-14 12:04:21', '2024-10-14 12:04:21', 230),
+(29, 1, 500, 'Pending', '2024-10-14 12:04:21', '2024-10-14 12:04:21', 230),
+(30, 1, 500, 'Pending', '2024-10-14 12:04:21', '2024-10-14 12:04:21', 230),
+(31, 1, 1, 'Completed', '2024-10-16 05:14:52', '2024-10-16 05:15:04', 232),
+(32, 2, 1, 'Completed', '2024-10-16 05:14:52', '2024-10-16 05:15:07', 232),
+(33, 2, 1, 'Completed', '2024-10-16 05:14:52', '2024-10-16 05:15:11', 232),
+(34, 1, 1, 'Completed', '2024-10-16 05:14:52', '2024-10-16 05:15:14', 232),
+(35, 1, 1, 'Pending', '2024-10-16 05:14:55', '2024-10-28 07:52:24', 233),
+(36, 2, 1, 'Completed', '2024-10-16 05:14:55', '2024-10-16 05:15:51', 233),
+(37, 3, 1, 'Completed', '2024-10-16 05:14:55', '2024-10-16 05:15:54', 233),
+(38, 5, 1, 'Completed', '2024-10-16 05:14:56', '2024-10-16 05:15:57', 233),
+(39, 1, 1, 'Pending', '2024-10-24 04:27:10', '2024-10-24 04:27:10', 232),
+(40, 2, 1, 'Pending', '2024-10-24 04:27:10', '2024-10-24 04:27:10', 232),
+(41, 2, 1, 'Pending', '2024-10-24 04:27:11', '2024-10-24 04:27:11', 232),
+(42, 1, 1, 'Pending', '2024-10-24 04:27:11', '2024-10-24 04:27:11', 232);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `products`
 --
 
@@ -173,7 +208,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `quantity`, `buy_price`, `sale_price`, `categorie_id`, `media_id`, `date`, `description`) VALUES
-(1, 'สกรูหัวเหลี่ยมมิลดำ', '4999795', 10.00, 50.00, 10, 16, '2024-08-22 14:16:31', NULL),
+(1, 'สกรูหัวเหลี่ยมมิลดำ', '4999795', 11.00, 50.00, 10, 16, '2024-08-22 14:16:31', NULL),
 (2, 'สกรูเกลียวปล่อยชุบหัวหกเหลี่ยม', '49949', 5.00, 20.00, 10, 17, '2024-08-26 12:08:10', NULL),
 (3, 'สกรูหัวเหลี่ยมชุบ', '499947', 5.00, 10.00, 10, 20, '2024-08-30 11:36:30', NULL),
 (4, 'สกรูหัวกลมคอเหลี่ยม', '499946', 1.00, 5.00, 10, 18, '2024-09-15 15:42:30', NULL),
@@ -204,9 +239,10 @@ CREATE TABLE `quotes` (
 --
 
 INSERT INTO `quotes` (`id`, `customer_id`, `sale_date`, `salesperson`, `subtotal`, `discount`, `tax`, `total`, `notes`, `internal_notes`, `created_at`) VALUES
-(220, 201, '2024-09-30', 'ทวีทรัพย์ เมฆเกลื่อน', 80.00, 0.00, 0.00, 85.60, '', '', '2024-09-30 05:08:14'),
-(221, 202, '2024-09-30', 'ทวีทรัพย์ เมฆเกลื่อน', 85.00, 0.00, 0.00, 90.95, '', '', '2024-09-30 06:22:49'),
-(223, 204, '2024-10-08', 'ทวีทรัพย์ เมฆเกลื่อน', 50.00, 1.00, 0.00, 52.97, 'AAA', 'ZZZ', '2024-10-08 16:14:29');
+(232, 213, '2024-10-14', 'ทวีทรัพย์ เมฆเกลื่อน', 140.00, 0.00, 0.00, 149.80, '', '', '2024-10-14 16:10:30'),
+(233, 214, '2024-10-16', 'ทวีทรัพย์ เมฆเกลื่อน', 82.00, 0.00, 0.00, 87.74, '', '', '2024-10-16 05:13:58'),
+(234, 215, '2024-10-16', 'ทวีทรัพย์ เมฆเกลื่อน', 1640.00, 10.00, 0.00, 1579.32, '', '', '2024-10-16 16:05:19'),
+(235, 216, '2024-10-17', 'ทวีทรัพย์ เมฆเกลื่อน', 40.00, 0.00, 0.00, 42.80, '', '', '2024-10-17 09:48:35');
 
 -- --------------------------------------------------------
 
@@ -229,55 +265,22 @@ CREATE TABLE `quote_items` (
 --
 
 INSERT INTO `quote_items` (`id`, `quote_id`, `product_id`, `quantity`, `price`, `total`, `created_at`) VALUES
-(154, 196, 1, 1.00, 50.00, 50.00, '2024-09-02 14:04:43'),
-(155, 197, 1, 1.00, 50.00, 50.00, '2024-09-02 14:05:13'),
-(156, 198, 1, 1.00, 50.00, 50.00, '2024-09-02 14:10:17'),
-(157, 199, 1, 1.00, 50.00, 50.00, '2024-09-02 14:14:50'),
-(158, 200, 1, 1.00, 50.00, 50.00, '2024-09-02 14:15:46'),
-(159, 201, 1, 1.00, 0.00, 0.00, '2024-09-02 14:22:06'),
-(160, 202, 1, 1.00, 0.00, 0.00, '2024-09-02 14:25:21'),
-(161, 203, 1, 1.00, 0.00, 0.00, '2024-09-02 14:25:34'),
-(162, 204, 1, 1.00, 50.00, 50.00, '2024-09-03 03:03:58'),
-(163, 204, 2, 1.00, 20.00, 20.00, '2024-09-03 03:03:58'),
-(164, 205, 1, 1.00, 50.00, 50.00, '2024-09-03 03:06:05'),
-(165, 206, 1, 1.00, 50.00, 6.00, '2024-09-03 03:21:37'),
-(166, 207, 1, 1.00, 50.00, 7.00, '2024-09-03 03:22:49'),
-(167, 208, 1, 1.00, 50.00, 50.00, '2024-09-03 03:31:50'),
-(168, 208, 3, 1.00, 10.00, 10.00, '2024-09-03 03:31:50'),
-(169, 209, 1, 50.00, 50.00, 2500.00, '2024-09-04 11:26:07'),
-(170, 209, 2, 50.00, 20.00, 1000.00, '2024-09-04 11:26:07'),
-(171, 210, 1, 1.00, 50.00, 50.00, '2024-09-04 12:03:16'),
-(172, 210, 2, 1.00, 20.00, 20.00, '2024-09-04 12:03:16'),
-(173, 210, 3, 1.00, 10.00, 10.00, '2024-09-04 12:03:16'),
-(174, 211, 1, 1.00, 50.00, 50.00, '2024-09-04 12:07:05'),
-(175, 211, 2, 1.00, 20.00, 20.00, '2024-09-04 12:07:05'),
-(176, 211, 3, 1.00, 10.00, 10.00, '2024-09-04 12:07:05'),
-(177, 212, 1, 50.00, 50.00, 2500.00, '2024-09-04 12:15:11'),
-(178, 212, 2, 50.00, 20.00, 1000.00, '2024-09-04 12:15:11'),
-(179, 212, 3, 50.00, 10.00, 500.00, '2024-09-04 12:15:11'),
-(180, 213, 1, 1.00, 50.00, 50.00, '2024-09-04 12:19:46'),
-(181, 213, 2, 1.00, 20.00, 20.00, '2024-09-04 12:19:46'),
-(182, 213, 3, 1.00, 10.00, 10.00, '2024-09-04 12:19:46'),
-(183, 214, 1, 1.00, 50.00, 50.00, '2024-09-09 02:17:44'),
-(184, 214, 2, 1.00, 20.00, 20.00, '2024-09-09 02:17:44'),
-(185, 214, 3, 1.00, 10.00, 10.00, '2024-09-09 02:17:44'),
-(186, 216, 3, 1.00, 10.00, 10.00, '2024-09-09 02:28:24'),
-(187, 217, 1, 1.00, 50.00, 50.00, '2024-09-09 02:30:37'),
-(188, 217, 2, 1.00, 20.00, 20.00, '2024-09-09 02:30:37'),
-(189, 217, 3, 1.00, 10.00, 10.00, '2024-09-09 02:30:37'),
-(190, 218, 1, 50.00, 50.00, 2500.00, '2024-09-09 07:11:55'),
-(191, 218, 3, 1.00, 10.00, 10.00, '2024-09-09 07:11:55'),
-(192, 218, 1, 1.00, 50.00, 50.00, '2024-09-09 07:11:55'),
-(193, 219, 1, 1.00, 50.00, 50.00, '2024-09-30 04:04:21'),
-(194, 219, 2, 1.00, 20.00, 20.00, '2024-09-30 04:04:21'),
-(195, 219, 3, 1.00, 10.00, 10.00, '2024-09-30 04:04:21'),
-(196, 220, 1, 1.00, 50.00, 50.00, '2024-09-30 05:08:14'),
-(197, 220, 3, 1.00, 10.00, 10.00, '2024-09-30 05:08:14'),
-(198, 220, 2, 1.00, 20.00, 20.00, '2024-09-30 05:08:14'),
-(199, 221, 1, 1.00, 50.00, 50.00, '2024-09-30 06:22:49'),
-(200, 221, 2, 1.00, 20.00, 20.00, '2024-09-30 06:22:49'),
-(201, 221, 3, 1.00, 10.00, 10.00, '2024-09-30 06:22:49'),
-(202, 223, 1, 1.00, 50.00, 50.00, '2024-10-08 16:14:29');
+(229, 232, 1, 1.00, 50.00, 50.00, '2024-10-14 16:10:30'),
+(230, 232, 2, 1.00, 20.00, 20.00, '2024-10-14 16:10:30'),
+(231, 232, 2, 1.00, 20.00, 20.00, '2024-10-14 16:10:31'),
+(232, 232, 1, 1.00, 50.00, 50.00, '2024-10-14 16:10:31'),
+(233, 233, 1, 1.00, 50.00, 50.00, '2024-10-16 05:13:58'),
+(234, 233, 2, 1.00, 20.00, 20.00, '2024-10-16 05:13:58'),
+(235, 233, 3, 1.00, 10.00, 10.00, '2024-10-16 05:13:58'),
+(236, 233, 5, 1.00, 2.00, 2.00, '2024-10-16 05:13:58'),
+(237, 234, 1, 20.00, 50.00, 1000.00, '2024-10-16 16:05:19'),
+(238, 234, 3, 20.00, 10.00, 200.00, '2024-10-16 16:05:19'),
+(239, 234, 2, 20.00, 20.00, 400.00, '2024-10-16 16:05:19'),
+(240, 234, 5, 20.00, 2.00, 40.00, '2024-10-16 16:05:20'),
+(241, 235, 5, 5.00, 2.00, 10.00, '2024-10-17 09:48:35'),
+(242, 235, 5, 5.00, 2.00, 10.00, '2024-10-17 09:48:35'),
+(243, 235, 5, 5.00, 2.00, 10.00, '2024-10-17 09:48:35'),
+(244, 235, 5, 5.00, 2.00, 10.00, '2024-10-17 09:48:35');
 
 -- --------------------------------------------------------
 
@@ -292,7 +295,6 @@ CREATE TABLE `sales` (
   `qty` int(11) NOT NULL,
   `price` decimal(25,2) NOT NULL,
   `date` date NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'Pending',
   `customer_id` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -300,16 +302,16 @@ CREATE TABLE `sales` (
 -- Dumping data for table `sales`
 --
 
-INSERT INTO `sales` (`id`, `product_id`, `delivery_company_id`, `qty`, `price`, `date`, `status`, `customer_id`) VALUES
-(120, 1, 1, 50, 50.00, '2024-09-30', 'Pending', 201),
-(121, 2, 1, 50, 20.00, '2024-09-30', 'Pending', 201),
-(122, 3, 1, 50, 10.00, '2024-09-30', 'Pending', 201),
-(123, 4, 1, 50, 5.00, '2024-09-30', 'Completed', 201),
-(124, 1, 2, 1, 50.00, '2024-10-06', 'Pending', 201),
-(125, 2, 3, 1, 20.00, '2024-10-06', 'Pending', 201),
-(126, 3, 2, 1, 10.00, '2024-10-06', 'Pending', 201),
-(127, 4, 3, 1, 5.00, '2024-10-06', 'Completed', 201),
-(128, 1, 8, 50, 50.00, '2024-10-08', 'Completed', 201);
+INSERT INTO `sales` (`id`, `product_id`, `delivery_company_id`, `qty`, `price`, `date`, `customer_id`) VALUES
+(120, 1, 1, 50, 50.00, '2024-09-30', 201),
+(121, 2, 1, 50, 20.00, '2024-09-30', 201),
+(122, 3, 1, 50, 10.00, '2024-09-30', 201),
+(123, 4, 1, 50, 5.00, '2024-09-30', 201),
+(124, 1, 2, 1, 50.00, '2024-10-06', 201),
+(125, 2, 3, 1, 20.00, '2024-10-06', 201),
+(126, 3, 2, 1, 10.00, '2024-10-06', 201),
+(127, 4, 3, 1, 5.00, '2024-10-06', 201),
+(128, 1, 8, 50, 50.00, '2024-10-08', 201);
 
 -- --------------------------------------------------------
 
@@ -333,9 +335,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `user_level`, `image`, `status`, `last_login`) VALUES
-(1, 'ADMIN', 'Admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 'x2g784x1.png', 1, '2024-10-08 17:49:07'),
-(7, 'Thaweesap', 'Fookry', '356a192b7913b04c54574d18c28d46e6395428ab', 3, 'no_image.jpg', 1, '2024-10-08 17:32:15'),
-(8, 'fluke', 'AA', '356a192b7913b04c54574d18c28d46e6395428ab', 2, 'no_image.jpg', 1, '2024-10-08 17:20:07');
+(1, 'ADMIN', 'Admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 1, 'x2g784x1.png', 1, '2024-10-30 12:36:43'),
+(10, 'Fluke', 'Fookry', '356a192b7913b04c54574d18c28d46e6395428ab', 2, 'no_image.jpg', 1, '2024-10-17 14:52:59');
 
 -- --------------------------------------------------------
 
@@ -348,7 +349,7 @@ CREATE TABLE `user_groups` (
   `group_name` varchar(150) NOT NULL,
   `group_level` int(11) NOT NULL,
   `group_status` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_groups`
@@ -356,8 +357,7 @@ CREATE TABLE `user_groups` (
 
 INSERT INTO `user_groups` (`id`, `group_name`, `group_level`, `group_status`) VALUES
 (1, 'Admin', 1, 1),
-(5, 'Special', 2, 1),
-(6, 'User', 3, 1);
+(8, 'User', 2, 1);
 
 --
 -- Indexes for dumped tables
@@ -369,12 +369,6 @@ INSERT INTO `user_groups` (`id`, `group_name`, `group_level`, `group_status`) VA
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
-
---
--- Indexes for table `clients`
---
-ALTER TABLE `clients`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `customers`
@@ -394,6 +388,13 @@ ALTER TABLE `delivery_company`
 ALTER TABLE `media`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `production_orders`
+--
+ALTER TABLE `production_orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `products`
@@ -445,19 +446,13 @@ ALTER TABLE `user_groups`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
-
---
--- AUTO_INCREMENT for table `clients`
---
-ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=222;
 
 --
 -- AUTO_INCREMENT for table `delivery_company`
@@ -469,25 +464,31 @@ ALTER TABLE `delivery_company`
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `production_orders`
+--
+ALTER TABLE `production_orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `quotes`
 --
 ALTER TABLE `quotes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=241;
 
 --
 -- AUTO_INCREMENT for table `quote_items`
 --
 ALTER TABLE `quote_items`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=259;
 
 --
 -- AUTO_INCREMENT for table `sales`
@@ -499,17 +500,23 @@ ALTER TABLE `sales`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_groups`
 --
 ALTER TABLE `user_groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `production_orders`
+--
+ALTER TABLE `production_orders`
+  ADD CONSTRAINT `production_orders_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `quotes`
@@ -518,23 +525,10 @@ ALTER TABLE `quotes`
   ADD CONSTRAINT `quotes_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`);
 
 --
--- Constraints for table `quote_items`
---
-ALTER TABLE `quote_items`
-  ADD CONSTRAINT `quote_items_ibfk_1` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `quote_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `sales`
 --
 ALTER TABLE `sales`
   ADD CONSTRAINT `SK` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `FK_user` FOREIGN KEY (`user_level`) REFERENCES `user_groups` (`group_level`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
