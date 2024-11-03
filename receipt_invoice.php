@@ -165,8 +165,11 @@ $total_with_vat = $quote['subtotal'] + $vat_amount;
         </div>
 
         <div class="customer-info">
+            <strong>วันที่:</strong> <?php echo date('d/m/Y', strtotime($quote['sale_date'])); ?><br>
+            <strong>พนักงานขาย:</strong> <?php echo $quote['salesperson']; ?><br><br>
             <strong>ลูกค้า:</strong> <?php echo $customer['name']; ?><br>
             <strong>ที่อยู่:</strong> <?php echo nl2br($customer['details']); ?><br>
+            <strong>เบอร์โทร:</strong> <?php echo $customer['phone_number']; ?><br>
             <strong>เลขที่ผู้เสียภาษี:</strong> <?php echo $customer['tax_id']; ?><br>
         </div>
 

@@ -14,10 +14,10 @@
 <?php
   $delete_id = delete_by_id('products',(int)$product['id']);
   if($delete_id){
-      $session->msg("s","Products deleted.");
+      $session->msg("s","ลบรายการสินค้าแล้ว.");
       redirect('product.php');
   } else {
-      $session->msg("d","Products deletion failed.");
+      $session->msg("d","การลบรายการสินค้าล้มเหลว");
       redirect('product.php');
   }
 ?>

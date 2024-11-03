@@ -28,6 +28,10 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                         <textarea class="form-control" name="customer_details" id="customer-details" placeholder="รายละเอียดที่อยู่"></textarea>
                     </div>
                     <div class="form-group">
+                        <label for="phone-number">เบอร์โทร</label>
+                        <input type="text" class="form-control" name="phone_number" placeholder="เบอร์โทร">
+                    </div>
+                    <div class="form-group">
                         <input type="text" class="form-control" name="postal_code" placeholder="รหัสไปรษณีย์">
                     </div>
                     <div class="form-group">
@@ -101,7 +105,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
                             <td>
                                 <button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button>
-                            </td>    
+                            </td>
                         </tr>
                         <tr>
                             <td>2</td>
@@ -117,9 +121,11 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                             <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
-                            <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
-                            </tr>
-                            <tr>
+                            <td>
+                                <button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>3</td>
                             <td>
                                 <select class="form-control product-select" name="product_id[]" onchange="updatePrice(this)">
@@ -133,9 +139,11 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                             <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
-                            <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
-                            </tr>
-                            <tr>
+                            <td>
+                                <button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
                             <td>4</td>
                             <td>
                                 <select class="form-control product-select" name="product_id[]" onchange="updatePrice(this)">
@@ -149,8 +157,10 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
                             <td><input type="number" name="quantity[]" class="form-control" value="0" oninput="calculateTotal()"></td>
                             <td><input type="number" name="price[]" class="form-control price-field" value="0.00" readonly></td>
                             <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
-                            <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
-                            </tr>
+                            <td>
+                                <button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <button type="button" class="add-item-btn btn btn-primary" onclick="addRow()">+ เพิ่มแถวรายการ</button>
@@ -198,16 +208,16 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
 <!-- Script สำหรับการจัดการตาราง -->
 <script>
     const productPrices = {
-        <?php foreach ($products as $product): ?> 
-            "<?php echo $product['id']; ?>": "<?php echo $product['sale_price']; ?>",
-        <?php endforeach; ?> };
+        <?php foreach ($products as $product): ?> "<?php echo $product['id']; ?>": "<?php echo $product['sale_price']; ?>",
+        <?php endforeach; ?>
+    };
 
     function addRow() {
-    var table = document.getElementById("product-rows");
-    var rowCount = table.rows.length + 1; // นับจำนวนแถวปัจจุบัน
-    var row = table.insertRow(); // เพิ่มแถวใหม่ในตาราง
+        var table = document.getElementById("product-rows");
+        var rowCount = table.rows.length + 1; // นับจำนวนแถวปัจจุบัน
+        var row = table.insertRow(); // เพิ่มแถวใหม่ในตาราง
 
-    row.innerHTML = `
+        row.innerHTML = `
         <td>${rowCount}</td>
         <td>
             <select class="form-control product-select" name="product_id[]" onchange="updatePrice(this)">
@@ -223,7 +233,7 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
         <td><input type="text" name="total[]" class="form-control total-field" readonly value="0.00"></td>
         <td><button type="button" class="delete-btn" onclick="deleteRow(this)">ลบ</button></td>
     `;
-}
+    }
 
     function updatePrice(selectElement) {
         const productId = selectElement.value;
@@ -238,42 +248,41 @@ $products = find_all('products'); // ดึงข้อมูลสินค้�
         calculateTotal();
     }
 
-    function deleteRow(btn) {
-        const row = btn.parentNode.parentNode;
-        row.parentNode.removeChild(row);
-        calculateTotal();
-    }
-
     function calculateTotal() {
         let subtotal = 0;
-        const rows = document.getElementById('product-rows').getElementsByTagName('tr');
+        let discount = parseFloat(document.getElementById("discount").value) || 0;
+        let taxCheckbox = document.getElementById("tax").checked;
 
-        for (let i = 0; i < rows.length; i++) {
-            const qty = parseFloat(rows[i].querySelector('input[name="quantity[]"]').value) || 0;
-            const price = parseFloat(rows[i].querySelector('input[name="price[]"]').value) || 0;
-            const total = qty * price;
-            rows[i].querySelector('input[name="total[]"]').value = total.toFixed(2);
+        const rows = document.querySelectorAll("#product-rows tr");
+        rows.forEach((row) => {
+            const quantity = parseFloat(row.querySelector("input[name='quantity[]']").value) || 0;
+            const price = parseFloat(row.querySelector("input[name='price[]']").value) || 0;
+            const totalField = row.querySelector("input[name='total[]']");
+            const total = quantity * price;
+
+            totalField.value = total.toFixed(2);
             subtotal += total;
-        }
+        });
 
-        document.getElementById('subtotal').value = subtotal.toFixed(2);
-        document.getElementById('subtotal-hidden').value = subtotal.toFixed(2);
+        let discountAmount = (subtotal * discount) / 100;
+        let totalAfterDiscount = subtotal - discountAmount;
 
-        let discount = parseFloat(document.getElementById('discount').value) || 0;
-        let discountedSubtotal = subtotal - (subtotal * (discount / 100));
+        let taxAmount = taxCheckbox ? totalAfterDiscount * 0.07 : 0;
+        let total = totalAfterDiscount + taxAmount;
 
-        if (document.getElementById('tax').checked) {
-            discountedSubtotal *= 1.07;
-        }
+        document.getElementById("subtotal").value = subtotal.toFixed(2);
+        document.getElementById("total").value = total.toFixed(2);
+        document.getElementById("subtotal-hidden").value = subtotal.toFixed(2);
+        document.getElementById("discount-hidden").value = discount.toFixed(2);
+        document.getElementById("total-hidden").value = total.toFixed(2);
 
-        document.getElementById('total').value = discountedSubtotal.toFixed(2);
-        document.getElementById('total-hidden').value = discountedSubtotal.toFixed(2);
-        document.getElementById('discount-hidden').value = discount;
+        // Update the <h3> element to display the total amount
+        document.getElementById("total-amount").innerText = total.toFixed(2);
+    }
 
-        document.getElementById('total-amount').textContent = discountedSubtotal.toFixed(2);
+    function deleteRow(button) {
+        const row = button.closest("tr");
+        row.remove();
+        calculateTotal();
     }
 </script>
-
-</body>
-
-</html>

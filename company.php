@@ -1,5 +1,5 @@
 <?php
-$page_title = 'บริษัทจัดส่งทั้งหมด';
+$page_title = 'บริษัททั้งหมด';
 require_once('includes/load.php');
 require_once('includes/session.php');
 require_once('includes/database.php');
@@ -20,10 +20,10 @@ if (isset($_POST['add_company'])) {
     $sql  = "INSERT INTO delivery_company (name, address, contact_number)";
     $sql .= " VALUES ('{$company_name}', '{$company_address}', '{$company_contact}')";
     if ($db->query($sql)) {
-      $session->msg("s", "เพิ่มบริษัทจัดส่งใหม่เรียบร้อยแล้ว");
+      $session->msg("s", "เพิ่มบริษัทเรียบร้อยแล้ว");
       redirect('company.php', false);
     } else {
-      $session->msg("d", "ขออภัย! การเพิ่มบริษัทจัดส่งล้มเหลว.");
+      $session->msg("d", "ขออภัย! การเพิ่มบริษัทล้มเหลว.");
       redirect('company.php', false);
     }
   } else {
@@ -45,7 +45,7 @@ if (isset($_POST['add_company'])) {
       <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>เพิ่มบริษัทจัดส่งใหม่</span>
+          <span>เพิ่มบริษัท</span>
         </strong>
       </div>
       <div class="panel-body">
@@ -60,7 +60,7 @@ if (isset($_POST['add_company'])) {
             <input type="text" class="form-control" name="company-contact" placeholder="เบอร์ติดต่อ" pattern="\d*" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           </div>
 
-          <button type="submit" name="add_company" class="btn btn-primary">เพิ่มบริษัทจัดส่ง</button>
+          <button type="submit" name="add_company" class="btn btn-primary">เพิ่มบริษัท</button>
         </form>
       </div>
     </div>
@@ -70,7 +70,7 @@ if (isset($_POST['add_company'])) {
       <div class="panel-heading">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>บริษัทจัดส่งทั้งหมด</span>
+          <span>บริษัททั้งหมด</span>
         </strong>
       </div>
       <div class="panel-body">

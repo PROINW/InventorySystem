@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // รับค่าจากฟอร์ม
     $client_name = $db->escape($_POST['customer_name']);
     $client_details = $db->escape($_POST['customer_details']);
+    $phone_number = $db->escape($_POST['phone_number']);  // รับค่าเบอร์โทร
     $postal_code = $db->escape($_POST['postal_code']);
     $tax_id = $db->escape($_POST['tax_id']);
     $branch_no = $db->escape($_POST['branch_no']);
@@ -21,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tax = isset($_POST['tax']) ? 7 : 0;
 
     // Insert customer details into the customers table
-    $sql_customer = "INSERT INTO customers (name, details, postal_code, tax_id, branch_no)
-                     VALUES ('{$client_name}', '{$client_details}', '{$postal_code}', '{$tax_id}', '{$branch_no}')";
+    $sql_customer = "INSERT INTO customers (name, details, phone_number, postal_code, tax_id, branch_no)
+                     VALUES ('{$client_name}', '{$client_details}', '{$phone_number}', '{$postal_code}', '{$tax_id}', '{$branch_no}')";
 
     if ($db->query($sql_customer)) {
         $customer_id = $db->insert_id();  // ดึง ID ของ customer ที่เพิ่งถูกเพิ่ม
@@ -70,3 +71,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         redirect('add_quote.php', false);
     }
 }
+?>

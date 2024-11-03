@@ -25,10 +25,10 @@ if(isset($_POST['edit_cat'])){
        $sql .= " WHERE id='{$categorie['id']}'";
      $result = $db->query($sql);
      if($result && $db->affected_rows() === 1) {
-       $session->msg("s", "Successfully updated Categorie");
+       $session->msg("s", "อัปเดตหมวดหมู่สำเร็จแล้ว");
        redirect('categorie.php',false);
      } else {
-       $session->msg("d", "Sorry! Failed to Update");
+       $session->msg("d", "ขอโทษ! ไม่สามารถอัปเดตได้");
        redirect('categorie.php',false);
      }
   } else {

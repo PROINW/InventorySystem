@@ -14,10 +14,10 @@
 <?php
   $delete_id = delete_by_id('categories',(int)$categorie['id']);
   if($delete_id){
-      $session->msg("s","Categorie deleted.");
+      $session->msg("s","ลบหมวดหมู่แล้ว");
       redirect('categorie.php');
   } else {
-      $session->msg("d","Categorie deletion failed.");
+      $session->msg("d","การลบหมวดหมู่ล้มเหลว");
       redirect('categorie.php');
   }
 ?>

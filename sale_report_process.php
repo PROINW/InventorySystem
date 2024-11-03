@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
   <?php if ($results && $results->num_rows > 0): ?>
     <div class="page-break">
       <div class="sale-head">
-        <h1>ระบบจัดการสต็อกสินค้า - รายงานการขาย</h1>
+        <h1>รายงานการขาย</h1>
         <strong><?php if (isset($start_date)) echo $start_date; ?> ถึงวันที่ <?php if (isset($end_date)) echo $end_date; ?></strong>
       </div>
       <table class="table table-border">
