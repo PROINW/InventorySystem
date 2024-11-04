@@ -1,6 +1,6 @@
 # ระบบจัดการคลังสินค้า (Inventory Management System)
 
-# http://localhost/InventorySystem #
+[ลิ้งค์เข้าสู่ระบบ](http://localhost/InventorySystem) 
 
 **USERNAME : admin**
 **PASSWORD : admin**
